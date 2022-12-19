@@ -1,0 +1,37 @@
+version: '3'
+networks:
+  default:
+
+services:
+  sso:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: sso
+    tty: true
+    restart: always
+    networks:
+      - default
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: exit $$( curl -so /dev/null --fail http://127.0.0.1:8080 && echo 0 || echo 1 )
+      interval: 30s
+      timeout: 1s
+      retries: 1
+    volumes:
+      - ./app/back:/home/api:ro
+
+  database:
+    image: rethinkdb:latest
+    container_name: rethink-sso
+    restart: always
+    ports:
+      - 8084:8080
+    expose:
+      - 28015
+    volumes:
+      - ./database:/data
+    command: rethinkdb --bind all -d /data
+    networks:
+      - default
