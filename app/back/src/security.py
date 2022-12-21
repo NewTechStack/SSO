@@ -65,55 +65,76 @@ class RSAKey(DB):
         """
         return self.data['data']['public']['data']
 
-class Token():
+class Token:
+    """
+    Class to issue and verify JSON web tokens (JWTs).
+    """
+
     def __init__(self, user):
         self.user = user
 
     def issue(self):
-        key = RSAKey().private()
+        """
+        Issue a new JWT for the user.
+        """
+        # Set the current time and the expiration time for the JWT
         now = datetime.datetime.utcnow()
         exp = now + datetime.timedelta(hours=2)
+        # Set the issuer and audience for the JWT
         issuer = "sso:back"
         audience = "sso:back"
+        # Set the data to be included in the JWT
         data = {
-            'iat': now,
-            'nbf': now,
-            'exp': exp,
-            'iss': issuer,
-            'aud': audience,
+            'iat': now,  # Issued At
+            'nbf': now,  # Not Before
+            'exp': exp,  # Expiration
+            'iss': issuer,  # Issuer
+            'aud': audience,  # Audience
             'payload': {
                 'id': self.user.id
             },
         }
-        token = jwt.encode(data, key, algorithm='RS256')
+        # Encode the data into a JWT using the RSA256 algorithm and the private key
+        token = self._encode_jwt(data)
         return {'exp': str(exp), "usrtoken": token}
 
     def verify(self, token):
-        key = RSAKey().public()
+        """
+        Verify the given JWT.
+        """
+        # If the token is prefixed with "Bearer ", remove the prefix
+        token = self._remove_bearer_prefix(token)
+        # Decode the JWT and set the user's ID to the ID in the payload
+        self._decode_and_set_id(token)
+
+    def _encode_jwt(self, data):
+        """
+        Encode the given data into a JWT using the RSA256 algorithm and the private key.
+        """
+        return jwt.encode(data, RSAKey().private(), algorithm='RS256')
+
+    def _remove_bearer_prefix(self, token):
+        """
+        If the token is prefixed with "Bearer ", remove the prefix.
+        """
         if len(token) > 7 and token[0:7] == "Bearer ":
-            token = token[7:]
+            return token[7:]
+        return token
+
+    def _decode_and_set_id(self, token):
+        """
+        Decode the given JWT using the public key and set the user's ID to the ID in the payload.
+        """
         try:
+            # Decode the JWT using the public key
             payload = jwt.decode(
                 token,
-                key,
+                RSAKey().public(),
                 leeway=0,
                 issuer="sso:back",
                 audience="sso:back",
                 algorithms=['RS256']
             )
+            # Set the user's ID to the ID in the payload of the JWT
             self.user.id = str(payload["payload"]["id"])
-        except jwt.ExpiredSignatureError:
-            raise Error.Forbidden('Expired Signature')
-        except jwt.InvalidSignatureError:
-            raise Error.Forbidden('Invalid Signature')
-        except jwt.InvalidIssuedAtError:
-            raise Error.Forbidden('Invalid issue time')
-        except jwt.InvalidIssuerError:
-            raise Error.Forbidden('Invalid Issuer')
-        except jwt.InvalidAudienceError:
-            raise Error.Forbidden('Invalid Audience')
-        except jwt.ImmatureSignatureError:
-            raise Error.Forbidden('Invalid issue time')
-        except jwt.DecodeError:
-            raise Error.InvalidArgument('Authorization', 'HEADER', 'Bearer <jwt>')
-        return self.user
+        except jwt.ExpiredSignature
