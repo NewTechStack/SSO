@@ -14,17 +14,27 @@ class User(DB):
                 ),
                 "contact": DictObject("protected",
                     data = {
-                        "email": StrObject("protected", property_name="verified"),
-                        "phone": StrObject("protected", property_name="verified")
+                        "email": StrObject("protected", property_name="verified", property=False),
+                        "phone": StrObject("protected", property_name="verified", property=False)
                     }
                 , property_name="verified"),
                 "identity": DictObject("protected",
                     data = {
-                        "last_name": StrObject("protected", property_name="verified"),
-                        "first_name": StrObject("protected", property_name="verified"),
-                        "birth_date": StrObject("protected", property_name="verified"),
-                        "address": StrObject("protected", property_name="verified"),
-                        "nationality": StrObject("protected", property_name="verified"),
+                        "last_name": StrObject("protected", property_name="verified", property=False),
+                        "first_name": StrObject("protected", property_name="verified", property=False),
+                        "birth_date": StrObject("protected", property_name="verified", property=False),
+                        "address": DictObject("protected", data = {
+                            "house_number": StrObject("protected", property_name="verified", property=False),
+                            "street_prefix":  StrObject("protected", property_name="verified", property=False),
+                            "street": StrObject("protected", property_name="verified", property=False),
+                            "street_suffix": StrObject("protected", property_name="verified", property=False),
+                            "apartment": StrObject("protected", property_name="verified", property=False),
+                            "buiding": StrObject("protected", property_name="verified", property=False),
+                            "city": StrObject("protected", property_name="verified", property=False),
+                            "state": StrObject("protected", property_name="verified", property=False),
+                            "zip": StrObject("protected", property_name="verified", property=False)
+                        }, property_name="verified", property=False),
+                        "nationality": StrObject("protected", property_name="verified", property=False),
                     }
                 , property_name="verified"),
                 "roles": ListObject("protected", data=[])
@@ -84,6 +94,9 @@ class User(DB):
         self.id = user[0]["id"]
         token = Token(self).issue()
         return token
+    
+    def edit_identity(self, identity):
+        
 
     def get(self):
         self.checkout()
