@@ -7,6 +7,8 @@ class DictObject(Base):
         super().__init__(base_type, type, property_name, property, last_update)
 
     def change_data(self, keys, new_data):
+        if not isinstance(new_data, dict):
+            raise Error.InternalLogic("Dictchange_data")
         key = keys[0]
         if key not in self.data:
             raise Error.InternalLogic('Dictchange_data')
@@ -27,6 +29,8 @@ class StrObject(Base):
         super().__init__(base_type, type, property_name, property, last_update)
 
     def change_data(self, new_data):
+        if not isinstance(new_data, str):
+            raise Error.InternalLogic("StrObject.change_data")
         self.data = new_data
         self.updated()
         return
