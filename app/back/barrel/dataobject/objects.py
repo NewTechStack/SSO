@@ -22,6 +22,7 @@ class DictObject(Base):
         if key not in self.data:
             raise Error.InternalLogic('Dictchange_data')
         del self.data["key"]
+        self.updated()
 
     def get_data(self, query = False, access = "public"):
         return {key: self.data[key].formating(query = query, access = access) for key in self.data}
