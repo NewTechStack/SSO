@@ -7,8 +7,6 @@ class DictObject(Base):
         super().__init__(base_type, type, property_name, property, last_update)
 
     def change_data(self, keys, new_data):
-        if not isinstance(new_data, dict):
-            raise Error.InternalLogic("Dictchange_data")
         key = keys[0]
         if key not in self.data:
             raise Error.InternalLogic('Dictchange_data')
@@ -19,6 +17,11 @@ class DictObject(Base):
         else:
             self.data[key].change_data(keys[1:], new_data)
         self.updated()
+    
+    def del_key(self, key):
+        if key not in self.data:
+            raise Error.InternalLogic('Dictchange_data')
+        del self.data["key"]
 
     def get_data(self, query = False, access = "public"):
         return {key: self.data[key].formating(query = query, access = access) for key in self.data}
