@@ -6,20 +6,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
+    <div id="app">
+    <!-- Login form -->
     <form @submit.prevent="login">
+      <!-- Email input field with label -->
       <div class="inputBox">
         <input type="email" name="email" v-model="email">
-        <label>Adresse email</label>
+        <label>Email</label>
       </div>
+      <!-- Password input field with label -->
       <div class="inputBox">
         <input type="password" name="password" v-model="password">
-        <label>Mot de passe</label>
+        <label>Password</label>
       </div>
-      <button type="submit">Se connecter</button>
+      <!-- Login button -->
+      <button type="submit">Connect</button>
     </form>
+    <!-- Link to sign up page -->
+    <a href="/signup">Don't have an account? Sign up</a>
   </div>
-
+  
   <!-- Chargement de Vue.js depuis un CDN -->
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <!-- Chargement d'Axios depuis un CDN -->
