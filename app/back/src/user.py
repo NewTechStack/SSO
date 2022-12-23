@@ -89,15 +89,20 @@ class User(DB):
             )
         if len(user) > 1:
             raise Error.InternalLogic(
-                "login"
+                "User.login more than 1 user matching"
             )
         self.id = user[0]["id"]
         token = Token(self).issue()
         return token
     
     def edit_identity(self, identity):
+        update = self.model["identity"]
+        self.checkout()
+        Builder.run(self.data)
+        self.data.change_data(['identity'], identity)
+        self.data = self.data.formating()
+        self.push()
         
-
     def get(self):
         self.checkout()
         return Builder.run(self.data)
@@ -136,6 +141,25 @@ def function():
     user = User()
     Token(user).verify(token)
     data = user.get().formating(access = "private")
+    return data
+
+@Decorators.option
+@app.route(f'/user/identity', ['OPTIONS', 'PUT'])
+@Decorators.response
+def function():
+    token = request.headers.get("Authorization", None)
+    if token is None:
+        raise Error.Forbidden('Missing Bearer token')
+    user = User()
+    Token(user).verify(token)
+    
+    data = Commons.Arguments.check(
+            source =    'body',
+            mandatory = [],
+            optionnal = ["last_name", "first_name", "birth_date", "address", "nationality"]
+        )
+    
+    data = user.edit_identity(data)
     return data
 
 # @Decorators.option
