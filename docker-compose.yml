@@ -5,7 +5,7 @@ networks:
 services:
   sso:
     build:
-      context: ./app
+      context: ./app/back
       dockerfile: Dockerfile
     container_name: sso
     tty: true
@@ -20,7 +20,7 @@ services:
       timeout: 1s
       retries: 1
     volumes:
-      - ./app/back:/home/api:ro
+      - ./app/back/src:/home/api:ro
 
   database:
     image: rethinkdb:latest

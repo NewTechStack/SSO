@@ -53,15 +53,20 @@ class Commons:
         def check(source, mandatory, optionnal  ):
             """
             depending off `source`,
-            check if the requeest contains the proper arguments
+            check if the request contains the proper arguments
             """
             data = {
                 'query': Commons.Arguments.retrieve_args,
                 'body': Commons.Arguments.retrieve_body
             }.get(source, lambda : {})()
-            args = [arg for arg in mandatory if arg not in data]
-            if len(args) > 0:
-                raise Error.MissingArgument(args, source)
+            if mandatory is not None:
+                args = [arg for arg in mandatory if arg not in data]
+                if len(args) > 0:
+                    raise Error.MissingArgument(args, source)
+                data = {k: data[k] for k in mandatory}
+            elif optionnal is not None:
+                data = {k: (data[k] if k in data else None) for k in mandatory}
+            data = []
             return data
 
     class Crypto:

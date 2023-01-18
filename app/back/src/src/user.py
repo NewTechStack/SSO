@@ -14,10 +14,18 @@ class User(DB):
                 ),
                 "contact": DictObject("protected",
                     data = {
-                        "email": StrObject("protected", property_name="verified", property=False),
+                        "email": StrObject("protected"),
                         "phone": StrObject("protected", property_name="verified", property=False)
                     }
-                , property_name="verified"),
+                , property_name="verified", property=False),
+                "crypto": DictObject("protected",
+                    data = {
+                        "encryption_password": StrObject("system"),
+                        "salt": StrObject("system"),
+                        "public_key": StrObject("private"),
+                        "address": StrObject("protected")
+                    }
+                ),
                 "identity": DictObject("protected",
                     data = {
                         "last_name": StrObject("protected", property_name="verified", property=False),
@@ -36,7 +44,7 @@ class User(DB):
                         }, property_name="verified", property=False),
                         "nationality": StrObject("protected", property_name="verified", property=False),
                     }
-                , property_name="verified"),
+                , property_name="verified", property=False),
                 "roles": ListObject("protected", data=[])
             }
         )
@@ -94,7 +102,7 @@ class User(DB):
         self.id = user[0]["id"]
         token = Token(self).issue()
         return token
-    
+
     def edit_identity(self, identity):
         update = self.model["identity"]
         self.checkout()
@@ -102,7 +110,7 @@ class User(DB):
         self.data.change_data(['identity'], identity)
         self.data = self.data.formating()
         self.push()
-        
+
     def get(self):
         self.checkout()
         return Builder.run(self.data)
@@ -152,13 +160,32 @@ def function():
         raise Error.Forbidden('Missing Bearer token')
     user = User()
     Token(user).verify(token)
-    
+
     data = Commons.Arguments.check(
             source =    'body',
             mandatory = [],
             optionnal = ["last_name", "first_name", "birth_date", "address", "nationality"]
         )
-    
+
+    data = user.edit_identity(data)
+    return data
+
+@Decorators.option
+@app.route(f'/user/identity', ['OPTIONS', 'PUT'])
+@Decorators.response
+def function():
+    token = request.headers.get("Authorization", None)
+    if token is None:
+        raise Error.Forbidden('Missing Bearer token')
+    user = User()
+    Token(user).verify(token)
+
+    data = Commons.Arguments.check(
+            source =    'body',
+            mandatory = [],
+            optionnal = ["last_name", "first_name", "birth_date", "address", "nationality"]
+        )
+
     data = user.edit_identity(data)
     return data
 

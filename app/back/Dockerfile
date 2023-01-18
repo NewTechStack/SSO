@@ -3,7 +3,7 @@ FROM python:3.9.1-buster as base
 MAINTAINER Courtel Eliot <eliot.courtel@wanadoo.fr>
 WORKDIR /home/api
 
-FROM base as sso
+FROM base as sso_back
 
 COPY ./requirements.txt ./
 RUN python3 -m pip install --upgrade pip
