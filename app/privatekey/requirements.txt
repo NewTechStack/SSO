@@ -1,3 +1,0 @@
-bottle
-eth-keys
-cryptography

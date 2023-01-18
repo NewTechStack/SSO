@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NewTechStack's SSO">
+  <link rel="icon" href="/asset/img/logo.webp">
+  <link rel="stylesheet" href="/register/style.css">
+</head>
+<body>
+    <div id="app" :style="{ display: appDisplay }">
+    <!-- Login form -->
+      <div class="wrapper" >
+        <div class="content">
+          <form @submit.prevent="register" v-if="!load">
+            <!-- Email input field with label -->
+            <div class="inputBox">
+              <input type="username" name="username" v-model="pseudo" placeholder="Pseudo" autocomplete="username">
+            </div>
+            <!-- Password input field with label -->
+            <div class="inputBox">
+              <input type="password" name="password" v-model="password" placeholder="Password" autocomplete="password">
+            </div>
+            <!-- Login button -->
+            <a href="/login">Login</a>
+            <button type="submit">Register</button>
+          </form>
+          <div v-if="load">
+            <div class="loader"></div>
+          </div>
+      </div>
+        <!-- Link to sign up page -->
+        <footer>© NewTechStack</footer>
+     </div>
+     <div class="notifs">
+       <div v-for="notif in notifs">
+         <div class="notif alert" v-bind:class="notif[1]">
+           <div class="notif-text">
+             {{notif[2]}}
+           </div>
+           <span class="notif-close">❌</span>
+         </div>
+       </div>
+     </div>
+    </div>
+
+    <script src="/asset/js/vue.min.js"></script>
+    <script src="/asset/js/axios.min.js"></script>
+    <script src="/register/script.js"></script>
+</body>
+</html>
