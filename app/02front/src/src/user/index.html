@@ -13,12 +13,64 @@
 <body>
     <div id="app" :style="{ display: appDisplay }">
     <!-- Login form -->
-      <div class="wrapper" >
-        <h2>Informations personnelles</h2>
-        Veuillez enregistrer vos changements en cliquant sur le bouton de validation
+      <div class="wrapper">
+        <div class="width-full">
+          <h2 class="text-title margin-no">Personal informations</h2>
+          <span class="text-subtitle margin-no">Please save your changes by clicking on the validation button</span>
+        </div>
+        <div id="informations margin-no" class="text-normal width-full">
+          <div v-if="!load">
+            <span class="text-subtitle" v-if="user_data.metadata.last_update">
+              Last modification: {{ user_data.metadata.last_update }}
+            </span>
+            <div class="width-half card card-left">
+              <h3 class="text-normal card-title">
+                Pseudo
+              </h3>
+              <div>
+                <span class="text-normal color">
+                  {{ user_data.data.pseudo.data }}
+                </span>
+                <br v-if="user_data.data.pseudo.metadata.last_update">
+                <span class="text-subtitle" v-if="user_data.data.pseudo.metadata.last_update">
+                  Last modification: {{ user_data.data.pseudo.metadata.last_update }}
+                </span>
+                <br>
+                <span class="text-subtitle">
+                  {{ message("pseudo", user_data.data.pseudo.metadata.type.actual) }}
+                </span>
+              </div>
+            </div>
+            <div class="width-half card card-left">
+              <h3 class="text-normal card-title">
+                Contact
+              </h3>
+              <div>
+                <span class="text-normal">
+                  Email: <a href="#" class="color">
+                    <span v-if="user_data.data.contact.data.email.data == 'None'">/</span>
+                    <span v-else>{{ user_data.data.contact.data.email.data }}</span>
+                  </a>
+                </span>
+                <br>
+                <span class="text-normal">
+                  Phone: <a href="#" class="color">
+                    <span v-if="user_data.data.contact.data.email.data == 'None'">/</span>
+                    <span v-else>{{ user_data.data.contact.data.phone.data }}</span>
+                    <div class="verified"> </div>
+                  </a>
+                </span>
+                <br>
+                <span class="text-subtitle">
+                  {{ message("email", user_data.data.contact.data.email.metadata.type.actual, "phone number", user_data.data.contact.data.phone.metadata.type.actual) }}
+                </span>
+              </div>
+            </div>
+          </div>
           <div v-if="load">
             <div class="loader"></div>
           </div>
+        </div>
       </div>
         <!-- Link to sign up page -->
         <footer>© NewTechStack</footer>
@@ -31,5 +83,7 @@
 
     <script src="/user/notifications.js"></script>
     <script src="/user/script.js"></script>
+
+    <script src="/user/encrypt.js"></script>
 </body>
 </html>

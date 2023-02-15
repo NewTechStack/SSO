@@ -45,19 +45,22 @@ class User(DB):
                         "nationality": StrObject("protected", property_name="verified", property=False),
                     }
                 , property_name="verified", property=False),
-                "roles": ListObject("protected", data=[])
+                "roles": ListObject("protected", data=[]),
+                "ecnrypt": DictObject("protected",
+                    data = {
+                        "salt": StrObject("private"),
+                        "rsa_public": StrObject("private"),
+                        "rsa_private_encrypted": StrObject("private")
+                    }
+                )
             }
         )
         super().__init__(id = id)
 
-    def register(self, pseudo, password):
+    def register(self, pseudo, password, salt, rsa_pub, ras_private_encrypted):
         if Commons.Crypto.valid_pseudo(pseudo) is None:
             raise Error.InvalidArgument(
                 "pseudo", "BODY", "6-30 char, num and _ only"
-            )
-        if Commons.Crypto.strong_pass(password) is None:
-            raise Error.InvalidArgument(
-                "password", "BODY", "8 char and contain maj, min, number and special char"
             )
         same_pseudo = list(
             self.r.filter(
@@ -72,7 +75,6 @@ class User(DB):
             raise Error.Forbidden(
                 "Pseudo already exist"
             )
-
         password = Commons.Crypto.hash(pseudo, password)
         if int(self.r.count().run(self.conn)) == 0:
             self.model.change_data(['roles'], ['creator'])
@@ -116,6 +118,14 @@ class User(DB):
         self.data = self.data.formating()
         self.push()
 
+    def edit_salt(self, salt):
+        update = self.model["salt"]
+        self.checkout()
+        Builder.run(self.data)
+        self.data.change_data(['salt'], salt)
+        self.data = self.data.formating()
+        self.push()
+
     def get(self):
         self.checkout()
         return Builder.run(self.data)
@@ -145,7 +155,7 @@ def function():
     return data
 
 @Decorators.option
-@app.route(f'/user', ['OPTIONS', 'GET'])
+@app.route(f'/user/salt', ['OPTIONS', 'GET'])
 @Decorators.response
 def function():
     token = request.headers.get("Authorization", None)
@@ -153,11 +163,11 @@ def function():
         raise Error.Forbidden('Missing Bearer token')
     user = User()
     Token(user).verify(token)
-    data = user.get().formating(access = "private")
+    data = user.get().formating(access = "private")["salt"]
     return data
 
 @Decorators.option
-@app.route(f'/user/identity', ['OPTIONS', 'PUT'])
+@app.route(f'/user/salt', ['OPTIONS', 'PUT'])
 @Decorators.response
 def function():
     token = request.headers.get("Authorization", None)
@@ -169,10 +179,22 @@ def function():
     data = Commons.Arguments.check(
             source =    'body',
             mandatory = [],
-            optionnal = ["last_name", "first_name", "birth_date", "address", "nationality"]
+            optionnal = ["salt"]
         )
 
-    data = user.edit_identity(data)
+    data = user.edit_salt(**data)
+    return data
+
+@Decorators.option
+@app.route(f'/user', ['OPTIONS', 'GET'])
+@Decorators.response
+def function():
+    token = request.headers.get("Authorization", None)
+    if token is None:
+        raise Error.Forbidden('Missing Bearer token')
+    user = User()
+    Token(user).verify(token)
+    data = user.get().formating(access = "private")
     return data
 
 @Decorators.option

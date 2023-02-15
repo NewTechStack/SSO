@@ -1,5 +1,6 @@
 version: '3'
 networks:
+  ext:
   exterior:
   proxy:
     internal: true
@@ -62,10 +63,7 @@ services:
         condition: "service_started"
     networks:
       - proxy
-      - exterior
       - dbnet
-    ports:
-      - 8080:8080
     expose:
       - 8080
     healthcheck:
@@ -82,11 +80,13 @@ services:
       dockerfile: Dockerfile
     container_name: sso-rethink
     restart: always
+    ports:
+      - 8080:8080
     expose:
-      - 8080
       - 28015
     volumes:
       - ./database:/data
     command: rethinkdb --bind all -d /data
     networks:
       - dbnet
+      - ext

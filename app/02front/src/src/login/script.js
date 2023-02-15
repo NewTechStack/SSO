@@ -26,15 +26,15 @@ var app = new Vue({
   methods: {
     async login(event) {
       this.load = true;
+      encoded = await encode_password_sha256(this.password);
       try {
         const response = await axios.post('/api/login', {
           pseudo: this.pseudo,
-          password: this.password
+          password: encoded["2time"]
         }).then(function(res) {
           localStorage.setItem('usrtoken', res.data.data.usrtoken);
           window.location.replace("/user/");
         });
-        this.load = false;
       } catch (error) {
         this.$refs.notification.new(error.response.data.data, true);
         this.load = false;

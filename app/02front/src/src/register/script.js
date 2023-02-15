@@ -26,15 +26,22 @@ var app = new Vue({
   methods: {
     async register(event) {
       this.load = true;
+      sha256_passwords = await encode_password_sha256(this.password);
+      rsa = await generateRSAKeyPair();
+      salt = await generate_salt();
+      aes = await genererCleAES(sha256_passwords["1time"], salt);
+      rsa_private_encrypted = await encrypterAvecAES(rsa.privateKey, aes);
       try {
         const response = await axios.post('/api/register', {
           pseudo: this.pseudo,
-          password: this.password
+          password: sha256_passwords["2time"],
+          salt: salt,
+          rsa_pub: rsa.publicKey,
+          rsa_private_encrypted: rsa_private_encrypted
         }).then(function(res) {
           localStorage.setItem('usrtoken', res.data.data.usrtoken);
           window.location.replace("/user/");
         });
-        this.load = false;
       } catch (error) {
         this.$refs.notification.new(error.response.data.data, true);
         this.load = false;

@@ -15,6 +15,7 @@ class DB(Rethink):
         if len(res["generated_keys"]) != 1:
             raise Error.InternalLogic("DBcreate")
         self.id = res["generated_keys"][0]
+        print(res)
         return self
 
     def push(self):
