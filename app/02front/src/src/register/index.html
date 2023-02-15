@@ -8,6 +8,7 @@
   <meta name="description" content="NewTechStack's SSO">
   <link rel="icon" href="/asset/img/logo.webp">
   <link rel="stylesheet" href="/register/style.css">
+  <link rel="stylesheet" href="/register/notifications.css">
 </head>
 <body>
     <div id="app" :style="{ display: appDisplay }">
@@ -17,7 +18,7 @@
           <form @submit.prevent="register" v-if="!load">
             <!-- Email input field with label -->
             <div class="inputBox">
-              <input type="username" name="username" v-model="pseudo" placeholder="Pseudo" autocomplete="username">
+              <input type="username" name="username" v-model="pseudo" placeholder="Pseudo">
             </div>
             <!-- Password input field with label -->
             <div class="inputBox">
@@ -34,20 +35,13 @@
         <!-- Link to sign up page -->
         <footer>© NewTechStack</footer>
      </div>
-     <div class="notifs">
-       <div v-for="notif in notifs">
-         <div class="notif alert" v-bind:class="notif[1]">
-           <div class="notif-text">
-             {{notif[2]}}
-           </div>
-           <span class="notif-close">❌</span>
-         </div>
-       </div>
-     </div>
+     <notifications ref="notification"></notifications>
     </div>
 
     <script src="/asset/js/vue.min.js"></script>
     <script src="/asset/js/axios.min.js"></script>
+
+    <script src="/register/notifications.js"></script>
     <script src="/register/script.js"></script>
 </body>
 </html>

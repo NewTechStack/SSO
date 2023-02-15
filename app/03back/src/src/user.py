@@ -84,13 +84,13 @@ class User(DB):
         token = Token(self).issue()
         return token
 
-    def login(self, identifier, password):
-        password = Commons.Crypto.hash(identifier, password)
+    def login(self, pseudo, password):
+        password = Commons.Crypto.hash(pseudo, password)
         user = list(
             self.r.filter(
                 DictObject(None,
                     {
-                        "pseudo": StrObject(None, identifier),
+                        "pseudo": StrObject(None, pseudo),
                         "password": DictObject(None, data={"by_pseudo": StrObject(None, password)})
                     }
                 ).formating(query = True)
@@ -138,7 +138,7 @@ def function():
 def function():
     data = Commons.Arguments.check(
             source =    'body',
-            mandatory = ["identifier", "password"],
+            mandatory = ["pseudo", "password"],
             optionnal = []
         )
     data = User().login(**data)

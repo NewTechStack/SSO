@@ -1,28 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NewTechStack's SSO">
+  <link rel="icon" href="/asset/img/logo.webp">
+  <link rel="stylesheet" href="/user/style.css">
+  <link rel="stylesheet" href="/user/notifications.css">
 </head>
 <body>
     <div id="app" :style="{ display: appDisplay }">
     <!-- Login form -->
       <div class="wrapper" >
-        <div class="content">
-          <form @submit.prevent="login" v-if="!load">
-            <!-- Email input field with label -->
-            <div class="inputBox">
-              <input type="pseudo" name="pseudo" v-model="pseudo" placeholder="Pseudo">
-            </div>
-            <!-- Password input field with label -->
-            <div class="inputBox">
-              <input type="password" name="password" v-model="password" placeholder="Password">
-            </div>
-            <!-- Login button -->
-            <a href="../register/">Register</a>
-            <button type="submit">Login</button>
-          </form>
+        <h2>Informations personnelles</h2>
+        Veuillez enregistrer vos changements en cliquant sur le bouton de validation
           <div v-if="load">
             <div class="loader"></div>
           </div>
@@ -30,45 +23,13 @@
         <!-- Link to sign up page -->
         <footer>© NewTechStack</footer>
      </div>
+     <notifications ref="notification"></notifications>
     </div>
 
-  <!-- Chargement de Vue.js depuis un CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <!-- Chargement d'Axios depuis un CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-  var app = new Vue({
-    el: '#app',
-    data: {
-      pseudo: '',
-      password: '',
-      load: false,
-      appDisplay: "block"
-    },
-    mounted: function() {
-        // Execute function after app has finished rendering
-        this.initialize();
-      },
-    methods: {
-      initialize(){
-        console.log("ok");
-      },
-      async login(event) {
-        // Envoi de la requête HTTP POST à l'URL /api/login en utilisant Axios
-        this.load = true;
-        try {
-          const response = await axios.post('/api/login', {
-            identifier: this.pseudo,
-            password: this.password
-          });
-          console.log(response);
-        } catch (error) {
-          console.error(error);
-        }
-        // this.load = false;
-      }
-    }
-  });
-</script>
+    <script src="/asset/js/vue.min.js"></script>
+    <script src="/asset/js/axios.min.js"></script>
+
+    <script src="/user/notifications.js"></script>
+    <script src="/user/script.js"></script>
 </body>
 </html>

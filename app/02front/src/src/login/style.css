@@ -2,7 +2,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #fefefe;
+  background: #000e29;
   font-family: Arial;
 }
 
@@ -13,7 +13,6 @@ body {
 /* Style du formulaire de connexion */
 div.wrapper {
   width: 300px;
-
   margin: 100px auto;
   border-radius: 8px;
   border: 1px solid #dadce0;
@@ -46,18 +45,18 @@ div.content > form {
   border-radius: 4px;
   box-sizing: border-box;
   outline: none;
-  background-color: transparent;
+  background-color: transparent !important;
   margin-bottom: 10px;
 }
 
 .inputBox input:focus, .inputBox input:hover {
-  border: 1px solid #4285f4;
+  border: 1px solid #1A6DF4;
 }
 
 /* Style du bouton de connexion */
 button[type="submit"] {
   width: calc(100% - 82px);
-  background-color: #4285f4;
+  background-color: #1A6DF4;
   color: #fff;
   font-size: 18px;
   padding: 10px;
@@ -79,11 +78,11 @@ form > a {
   border-radius: 2px;
   cursor: pointer;
   margin-top: 20px;
-  border: 1px solid #4285f4;
+  border: 1px solid #1A6DF4;
 }
 
 form > a:hover {
-  background-color: #357ae8;
+  background-color: #1A6DF4;
   color: #fff;
   transition: opacity 0s ease-out 0.29s, width 0.15s ease-out 0.3s;
 }
@@ -101,8 +100,13 @@ a:hover {
 /* Médias queries */
 @media (max-width: 600px) {
   form {
+    padding: 0px 0px 0px 0px !important;
     width: 90%;
     margin: 50px auto;
+  }
+
+  .content {
+    min-height: 200px !important;
   }
 }
 
@@ -115,12 +119,12 @@ a:hover {
 
 @media (prefers-color-scheme: dark) {
   body {
-    background-color: rgb(32,33,35);
-    color: white;
+    background: #000e29;
+    color: rgb(180, 180, 180);
   }
   .inputBox input {
     color: white;
-    border-bottom-color: rgb(80, 80, 80);
+    border-color: rgb(180, 180, 180);
   }
   form > a {
     color: white;
@@ -131,8 +135,8 @@ a:hover {
   }
 
   div.wrapper {
-    color: rgb(80, 80, 80);
-    border-color: rgb(80, 80, 80);
+    color: rgb(180, 180, 180);
+    border-color: rgb(180, 180, 180);
   }
 }
 

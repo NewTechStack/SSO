@@ -13,7 +13,6 @@ body {
 /* Style du formulaire de connexion */
 div.wrapper {
   width: 300px;
-
   margin: 100px auto;
   border-radius: 8px;
   border: 1px solid #dadce0;
@@ -46,18 +45,18 @@ div.content > form {
   border-radius: 4px;
   box-sizing: border-box;
   outline: none;
-  background-color: transparent;
+  background-color: transparent !important;
   margin-bottom: 10px;
 }
 
 .inputBox input:focus, .inputBox input:hover {
-  border: 1px solid #4285f4;
+  border: 1px solid #1A6DF4;
 }
 
 /* Style du bouton de connexion */
 button[type="submit"] {
   width: calc(100% - 82px);
-  background-color: #4285f4;
+  background-color: #1A6DF4;
   color: #fff;
   font-size: 18px;
   padding: 10px;
@@ -79,11 +78,11 @@ form > a {
   border-radius: 2px;
   cursor: pointer;
   margin-top: 20px;
-  border: 1px solid #4285f4;
+  border: 1px solid #1A6DF4;
 }
 
 form > a:hover {
-  background-color: #4285f4;
+  background-color: #1A6DF4;
   color: #fff;
   transition: opacity 0s ease-out 0.29s, width 0.15s ease-out 0.3s;
 }
@@ -101,8 +100,13 @@ a:hover {
 /* Médias queries */
 @media (max-width: 600px) {
   form {
+    padding: 0px 0px 0px 0px !important;
     width: 90%;
     margin: 50px auto;
+  }
+
+  .content {
+    min-height: 200px !important;
   }
 }
 
@@ -116,11 +120,11 @@ a:hover {
 @media (prefers-color-scheme: dark) {
   body {
     background: #000e29;
-    color: white;
+    color: rgb(180, 180, 180);
   }
   .inputBox input {
     color: white;
-    border-bottom-color: rgb(110, 110, 110);
+    border-color: rgb(180, 180, 180);
   }
   form > a {
     color: white;
@@ -131,8 +135,8 @@ a:hover {
   }
 
   div.wrapper {
-    color: rgb(80, 80, 80);
-    border-color: rgb(80, 80, 80);
+    color: rgb(180, 180, 180);
+    border-color: rgb(180, 180, 180);
   }
 }
 
@@ -182,97 +186,4 @@ span.ll::before {
   }
 
 
-}
-
-.notif {
-  border-radius: 4px;
-  transition:0.5s;
-  cursor:pointer;
-  font-size: 18px;
-  text-shadow: none;
-  max-width: 800px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.alert
-{
-    border: 1px solid rgba(241, 6, 6, 0.81);
-    background-color: rgba(220, 17, 1, 0.16);
-    box-shadow: 0px 0px 2px #ff0303;
-    color: #ff0303;
-}
-
-.notif-text {
-  width: calc(100% - 30px);
-  display: inline-block;
-}
-
-.notif-close {
-  position: fixed;
-  margin-top: -4px;
-}
-
-.notifs {
-    position: absolute;
-    width: 800px;
-    top: 10px;
-    right: 10px;
-}
-
-.life-cycle-0 {
-  padding-left: 0px;
-  padding-right: 0px;
-  height: 0px;
-  margin-left: 100%;
-  overflow: hidden;
-  border: 0px;
-  margin-bottom: 0px;
-  transition:  0.5s;
-}
-
-.life-cycle-0 > .notif-close,  .life-cycle-0 > .notif-text{
-
-  opacity: 0;
-}
-
-.life-cycle-1 {
-  padding-left: 0px;
-  padding-right: 0px;
-  height: 20px;
-  margin-left: 100%;
-  overflow: hidden;
-  margin-bottom: 10px;
-  transition: 0.5s;
-}
-
-.life-cycle-1 > .notif-text{
-  opacity: 1;
-  white-space: nowrap;
-}
-
-.life-cycle-2 {
-  padding-left: 10px;
-  padding-right: 10px;
-  height: auto;
-  min-height: 20px;
-  margin-left: 0%;
-  overflow: hidden;
-  transition: 0.5s;
-}
-.life-cycle-2 > .notif-close {
-  transition: opacity 0.5s;
-  opacity: 0;
-}
-
-.life-cycle-3 > .notif-close {
-  opacity: 1;
-}
-
-.life-cycle-3 > .notif-text {
-  white-space: unset;
-}
-
-.transition-0, .transition-0 > .notif-close {
-  transition: 0s !important;
 }
