@@ -13,7 +13,7 @@ let notification = {
   props: {text: {}, warning: {default: false}},
   methods: {
     lifeCycle: function(lifespan) {
-      time = [false, 200, 300, 500, 300000, 100, 300, 200]
+      time = [false, 200, 300, 500, 3000, 100, 500, 200]
       indexClass = this.classList.indexOf("notification-" + lifespan);
       lifespan += 1;
       if (indexClass != -1){

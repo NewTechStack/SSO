@@ -2,9 +2,23 @@ var app = new Vue({
   el: '#app',
   data: {
     pseudo: '',
-    password: '',
     load: false,
     appDisplay: "block",
+    warning: {
+      pseudo: {
+        status: false,
+        text: ''
+      },
+      password: {
+        status: false,
+        text: ''
+      }
+    },
+    password: {
+      visibility: "invisible",
+      type: "password",
+      value: ''
+    }
   },
   mounted: function() {
     token = localStorage.getItem('usrtoken');
@@ -26,17 +40,17 @@ var app = new Vue({
   methods: {
     async register(event) {
       this.load = true;
-      sha256_passwords = await encode_password_sha256(this.password);
-      rsa = await generateRSAKeyPair();
+      sha256_passwords = await encode_password_sha512(this.password);
+      rsa = await generate_rsa_key_pair();
       salt = await generate_salt();
-      aes = await genererCleAES(sha256_passwords["1time"], salt);
-      rsa_private_encrypted = await encrypterAvecAES(rsa.privateKey, aes);
+      aes = await generate_aes_key(sha256_passwords["1time"], salt);
+      rsa_private_encrypted = await encrypt_using_aes(rsa.private_key, aes);
       try {
         const response = await axios.post('/api/register', {
           pseudo: this.pseudo,
           password: sha256_passwords["2time"],
           salt: salt,
-          rsa_pub: rsa.publicKey,
+          rsa_pub: rsa.public_key,
           rsa_private_encrypted: rsa_private_encrypted
         }).then(function(res) {
           localStorage.setItem('usrtoken', res.data.data.usrtoken);
@@ -46,6 +60,10 @@ var app = new Vue({
         this.$refs.notification.new(error.response.data.data, true);
         this.load = false;
       }
+    },
+    password_switch(){
+      this.password.visibility = (this.password.visibility == 'visible' ? 'invisible' : 'visible');
+      this.password.type = (this.password.visibility == 'visible' ? 'text' : 'password');
     }
   }
 });

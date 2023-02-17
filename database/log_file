@@ -38,3 +38,16 @@
 2023-02-15T20:38:07.434247131 0.077015s notice: Server ready, "bf0372b11e39_oda" 536b8f86-aaeb-45a2-a66f-e88480aac417
 2023-02-15T20:38:09.057627274 1.700485s info: Table 12c742b1-ed2c-4169-a47e-c777c62bf032: Starting a new Raft election for term 1.
 2023-02-15T20:38:09.061644085 1.704502s info: Table 12c742b1-ed2c-4169-a47e-c777c62bf032: This server is Raft leader for term 1. Latest log index is 0.
+2023-02-16T16:24:16.885348716 0.036863s notice: Running rethinkdb 2.4.2~0bullseye (GCC 10.2.1)...
+2023-02-16T16:24:16.890895846 0.042411s notice: Running on Linux 5.10.16.3-microsoft-standard-WSL2 x86_64
+2023-02-16T16:24:16.891423483 0.042938s notice: Loading data from directory /data
+2023-02-16T16:24:16.910202109 0.061716s info: Automatically using cache size of 10864 MB
+2023-02-16T16:24:16.913480745 0.064995s notice: Listening for intracluster connections on port 29015
+2023-02-16T16:24:16.938449110 0.089963s notice: Listening for client driver connections on port 28015
+2023-02-16T16:24:16.938504746 0.090019s notice: Listening for administrative HTTP connections on port 8080
+2023-02-16T16:24:16.938506455 0.090021s notice: Listening on cluster addresses: 127.0.0.1, 172.22.0.2, 172.25.0.2
+2023-02-16T16:24:16.938507398 0.090022s notice: Listening on driver addresses: 127.0.0.1, 172.22.0.2, 172.25.0.2
+2023-02-16T16:24:16.938507925 0.090022s notice: Listening on http addresses: 127.0.0.1, 172.22.0.2, 172.25.0.2
+2023-02-16T16:24:16.938515204 0.090029s notice: Server ready, "bf0372b11e39_oda" 536b8f86-aaeb-45a2-a66f-e88480aac417
+2023-02-16T16:24:18.711596128 1.863110s info: Table 12c742b1-ed2c-4169-a47e-c777c62bf032: Starting a new Raft election for term 2.
+2023-02-16T16:24:18.716498816 1.868013s info: Table 12c742b1-ed2c-4169-a47e-c777c62bf032: This server is Raft leader for term 2. Latest log index is 2.

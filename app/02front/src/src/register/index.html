@@ -15,16 +15,21 @@
     <!-- Login form -->
       <div class="wrapper" >
         <div class="content">
+          <span>Register</span>
           <form @submit.prevent="register" v-if="!load">
-            <!-- Email input field with label -->
             <div class="inputBox">
-              <input type="username" name="username" v-model="pseudo" placeholder="Pseudo">
+              <input type="text" name="username" v-model="pseudo" placeholder="Pseudo" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false" aria-invalid="false">
+              <div class="warning noselect" v-if="warning.pseudo.status == true"><div class="warning-img"></div><div class="text">{{ warning.pseudo.text }}</div></div>
             </div>
-            <!-- Password input field with label -->
             <div class="inputBox">
-              <input type="password" name="password" v-model="password" placeholder="Password" autocomplete="password">
+              <input v-bind:type="password.type" name="password" v-model="password.value" placeholder="Password" autocomplete="current-password" autocapitalize="off" autocorrect="off" spellcheck="false" aria-invalid="false">
+              <button type="button" v-bind:class="password.visibility" v-on:click="password_switch()"></button>
+              <div class="warning noselect" v-if="warning.password.status == true"><div class="warning-img"></div><div class="text">={{ warning.password.text }}</div></div>
             </div>
-            <!-- Login button -->
+            <div class="stayConnected">
+              <input type="checkbox">
+              <div>Keep me logged</div>
+            </div>
             <a href="/login">Login</a>
             <button type="submit">Register</button>
           </form>

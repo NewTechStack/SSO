@@ -2,9 +2,23 @@ var app = new Vue({
   el: '#app',
   data: {
     pseudo: '',
-    password: '',
     load: false,
     appDisplay: "block",
+    warning: {
+      pseudo: {
+        status: false,
+        text: ''
+      },
+      password: {
+        status: false,
+        text: ''
+      }
+    },
+    password: {
+      visibility: "invisible",
+      type: "password",
+      value: ''
+    }
   },
   mounted: function() {
     token = localStorage.getItem('usrtoken');
@@ -26,7 +40,7 @@ var app = new Vue({
   methods: {
     async login(event) {
       this.load = true;
-      encoded = await encode_password_sha256(this.password);
+      encoded = await encode_password_sha512(this.password);
       try {
         const response = await axios.post('/api/login', {
           pseudo: this.pseudo,
@@ -39,6 +53,10 @@ var app = new Vue({
         this.$refs.notification.new(error.response.data.data, true);
         this.load = false;
       }
+    },
+    password_switch(){
+      this.password.visibility = (this.password.visibility == 'visible' ? 'invisible' : 'visible');
+      this.password.type = (this.password.visibility == 'visible' ? 'text' : 'password');
     }
   }
 });
