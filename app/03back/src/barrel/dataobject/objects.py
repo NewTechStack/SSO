@@ -17,7 +17,7 @@ class DictObject(Base):
         else:
             self.data[key].change_data(keys[1:], new_data)
         self.updated()
-    
+
     def del_key(self, key):
         if key not in self.data:
             raise Error.InternalLogic('Dictchange_data')
@@ -53,4 +53,5 @@ class ListObject(Base):
         return
 
     def get_data(self, query = False,  access = "public"):
+        print(self.data)
         return [d.formating(query = query, access = access) for d in self.data]

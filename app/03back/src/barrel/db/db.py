@@ -12,10 +12,10 @@ class DB(Rethink):
         if self.id is not None:
             self.data["id"] = self.id
         res = dict(self.r.insert([self.data]).run(self.conn))
+        print(res)
         if len(res["generated_keys"]) != 1:
             raise Error.InternalLogic("DBcreate")
         self.id = res["generated_keys"][0]
-        print(res)
         return self
 
     def push(self):

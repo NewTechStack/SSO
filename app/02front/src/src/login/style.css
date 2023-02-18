@@ -84,7 +84,7 @@ div.content > span {
 }
 
 .inputBox > div.warning > div.warning-img {
-  background-image: url("/asset/img/warning.svg");
+  background-image: url("/assets/img/warning.svg");
   background-repeat: no-repeat;
   width: 1.25rem;
   height: 1.25rem;
@@ -122,14 +122,14 @@ div.content > span {
 }
 
 .invisible {
-  mask-image: url("/asset/img/invisible.svg");
-  -webkit-mask-image: url("/asset/img/invisible.svg");
+  mask-image: url("/assets/img/invisible.svg");
+  -webkit-mask-image: url("/assets/img/invisible.svg");
   background-color: rgb(32,33,36);
   top: 5.2px;
 }
 .visible {
-  mask-image: url("/asset/img/visible.svg");
-  -webkit-mask-image: url("/asset/img/visible.svg");
+  mask-image: url("/assets/img/visible.svg");
+  -webkit-mask-image: url("/assets/img/visible.svg");
   background-color: #1A6DF4;
   top: 7.1px;
 }

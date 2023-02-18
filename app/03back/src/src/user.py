@@ -46,18 +46,38 @@ class User(DB):
                     }
                 , property_name="verified", property=False),
                 "roles": ListObject("protected", data=[]),
-                "ecnrypt": DictObject("protected",
+                "encrypt": DictObject("public",
                     data = {
                         "salt": StrObject("private"),
-                        "rsa_public": StrObject("private"),
-                        "rsa_private_encrypted": StrObject("private")
+                        "rsa_owner":  DictObject("private",
+                            data = {
+                            "rsa_public": StrObject("private"),
+                            "rsa_private_encrypted": StrObject("private")
+                            }
+                        ),
+                        "rsa_contact":  DictObject("public",
+                            data = {
+                            "rsa_public": StrObject("public"),
+                            "rsa_private_encrypted": StrObject("private")
+                            }
+                        ),
+                        "ecdsa":  DictObject("public",
+                            data = {
+                            "rsa_public": StrObject("public"),
+                            "rsa_private_encrypted": StrObject("private")
+                            }
+                        ),
                     }
                 )
             }
         )
         super().__init__(id = id)
 
-    def register(self, pseudo, password, salt, rsa_pub, ras_private_encrypted):
+    def register(self, pseudo, password, salt,
+                 rsa_owner_pub, rsa_owner_private_encrypted,
+                 rsa_contact_pub, rsa_contact_private_encrypted,
+                 ecdsa, ecdsa_private_encrypted
+                ):
         if Commons.Crypto.valid_pseudo(pseudo) is None:
             raise Error.InvalidArgument(
                 "pseudo", "BODY", "6-30 char, num and _ only"
@@ -77,7 +97,7 @@ class User(DB):
             )
         password = Commons.Crypto.hash(pseudo, password)
         if int(self.r.count().run(self.conn)) == 0:
-            self.model.change_data(['roles'], ['creator'])
+            self.model.change_data(['roles'], [StrObject('creator')])
         self.model.change_data(['pseudo'], pseudo)
         self.model.change_data(['password', 'by_pseudo'], password)
         self.data = self.model.formating()
@@ -136,7 +156,17 @@ class User(DB):
 def function():
     data = Commons.Arguments.check(
             source =    'body',
-            mandatory = ["pseudo", "password"],
+            mandatory = [
+                "pseudo",
+                "password",
+                "salt",
+                "rsa_owner_pub",
+                "rsa_owner_private_encrypted",
+                "rsa_contact_pub",
+                "rsa_contact_private_encrypted",
+                "ecdsa",
+                "ecdsa_private_encrypted"
+            ],
             optionnal = []
         )
     data = User().register(**data)
