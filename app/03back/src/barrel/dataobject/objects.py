@@ -53,5 +53,4 @@ class ListObject(Base):
         return
 
     def get_data(self, query = False,  access = "public"):
-        print(self.data)
         return [d.formating(query = query, access = access) for d in self.data]

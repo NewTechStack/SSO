@@ -138,4 +138,4 @@ class Token:
             # Set the user's ID to the ID in the payload of the JWT
             self.user.id = str(payload["payload"]["id"])
         except:
-            Error.Forbidden("Invalid bearer token")
+            raise Error.Forbidden("Invalid bearer token")

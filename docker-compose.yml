@@ -84,9 +84,9 @@ services:
       - 8080:8080
     expose:
       - 28015
-    volumes:
-      - ./database:/data
-    command: rethinkdb --bind all -d /data
+    # volumes:
+    #   - ./database:/data
+    # command: rethinkdb --bind all -d /data
     networks:
       - dbnet
       - ext

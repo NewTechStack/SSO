@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Register</title>
+  <title>Your account</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="NewTechStack's SSO">
   <link rel="icon" href="/assets/img/logo.webp">
   <link rel="stylesheet" href="/user/style.css">
-  <link rel="stylesheet" href="/assets/notifications.css">
+  <link rel="stylesheet" href="/assets/css/notifications.css">
 </head>
 <body>
     <div id="app" :style="{ display: appDisplay }">
@@ -18,16 +18,16 @@
           <h2 class="text-title margin-no">Personal informations</h2>
           <span class="text-subtitle margin-no">Please save your changes by clicking on the validation button</span>
         </div>
-        <div id="informations margin-no" class="text-normal width-full">
+        <div id="informations" class="text-normal width-full">
           <div v-if="!load">
             <span class="text-subtitle" v-if="user_data.metadata.last_update">
               Last modification: {{ user_data.metadata.last_update }}
             </span>
-            <div class="width-half card card-left">
-              <h3 class="text-normal card-title">
-                Pseudo
-              </h3>
-              <div>
+            <div class="width-half card card-130 card-left"  tabindex="0">
+              <div class="card-title">
+                <h3 class="text-normal">Pseudo</h3>
+              </div>
+              <div class="content">
                 <span class="text-normal color">
                   {{ user_data.data.pseudo.data }}
                 </span>
@@ -36,18 +36,19 @@
                   Last modification: {{ user_data.data.pseudo.metadata.last_update }}
                 </span>
                 <br>
-                <span class="text-subtitle">
+                <div class="text-subtitle">
                   {{ message("pseudo", user_data.data.pseudo.metadata.type.actual) }}
-                </span>
+                </div>
               </div>
             </div>
-            <div class="width-half card card-left">
-              <h3 class="text-normal card-title">
-                Contact
-              </h3>
-              <div>
+            <div class="width-half card card-130 card-right" tabindex="0">
+              <div class="card-title">
+                <h3 class="text-normal">Contact</h3>
+              </div>
+              <div class="content">
                 <span class="text-normal">
-                  Email: <a href="#" class="color">
+                  Email:
+                  <a href="#" class="color">
                     <span v-if="user_data.data.contact.data.email.data == 'None'">/</span>
                     <span v-else>{{ user_data.data.contact.data.email.data }}</span>
                   </a>
@@ -57,13 +58,151 @@
                   Phone: <a href="#" class="color">
                     <span v-if="user_data.data.contact.data.email.data == 'None'">/</span>
                     <span v-else>{{ user_data.data.contact.data.phone.data }}</span>
-                    <div class="verified"> </div>
+                    <!-- <div class="verified"> </div> -->
                   </a>
                 </span>
                 <br>
-                <span class="text-subtitle">
+                <div class="text-subtitle">
                   {{ message("email", user_data.data.contact.data.email.metadata.type.actual, "phone number", user_data.data.contact.data.phone.metadata.type.actual) }}
-                </span>
+                </div>
+              </div>
+            </div>
+            <div class="width-full card-100 card" tabindex="0">
+              <div class="card-title" v-if="user_data.data.crypto.data.address.data != 'None'">
+                <h3 class="text-normal">Wallet</h3>
+              </div>
+              <div class="content" v-if="user_data.data.crypto.data.address.data != 'None'">
+                <div class="non">{{ 'user_data.data.crypto.data.address.data' | clear }}</div>
+                <div class="text-normal">
+                  Address:
+                  <a v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check" target="_blank" class="color">
+                    {{ user_data.data.crypto.data.address.data | clear_check | address_filter}}
+                  </a>
+                  <button class="copy"  v-on:click="copy_to_clipboard(user_data.data.crypto.data.address.data)"></button>
+                  <div class="question" id="address-ex" tabindex="0"></div>
+                  <div class="text-subtitle" tabindex="0">
+                  {{ message("address", user_data.data.crypto.data.address.metadata.type.actual) }}
+                  </div>
+                  <div id="ex-address" tabindex="0">
+                    By using our site, you can seamlessly interact with various
+                    blockchain networks, view your balances, and track your transactions.
+                    Please note that our site does not require you to create
+                    separate accounts for each chain.
+                    You can use the same wallet address across all compatible chains.
+                    Our website is compatible with several blockchain networks.
+                    You can use our services with the following chains:
+                    <ul>
+                      <li><a target="_blank" v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check">Ethereum</a></li>
+                      <li><a target="_blank" v-bind:href="'https://bscscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Binance Smart Chain (BSC)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://polygonscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Polygon (MATIC)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://hecoinfo.com/address/' + user_data.data.crypto.data.address.data | clear_check">Huobi Eco Chain (HECO)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://ftmscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Fantom Opera (FTM)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://cchain.explorer.avax.network/address/' + user_data.data.crypto.data.address.data | clear_check">Avalanche (AVAX)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://www.oklink.com/okexchain/address/' + user_data.data.crypto.data.address.data | clear_check">OKExChain (OKT)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://blockscout.com/xdai/mainnet/address/' + user_data.data.crypto.data.address.data | clear_check">xDai Chain (XDAI)</a></li>
+                      <li><a target="_blank" v-bind:href="'https://explorer.harmony.one/address/' + user_data.data.crypto.data.address.data | clear_check">Harmony One (ONE)</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="propose">
+                  <div class="propose-title" v-if="create_wallet.step <= 1">
+                    <div class="text-title color"><div class="eth"></div >Create your wallet</div>
+                    <div class="spacer"></div>
+                    <div class="text-normal">Simply and securely create your ethereum wallet</div>
+                  </div>
+                  <div id="new_adress">
+                    <div>
+                      <div class="reload" v-if="create_wallet.step == 1" v-on:click="generate_wallet()">
+                      </div>
+                      <span class="address">
+                          <div class="eth" v-if="create_wallet.step > 1"></div><div class="raw">{{ create_wallet.address }}</div>
+                      </span>
+                      <div>
+                        <div class="dart" v-if="create_wallet.step == 1"  v-on:click="create_wallet.step += 1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="mnemonic">
+                    <div v-if="create_wallet.step == 2" >
+                      Display your mnemonic <div class="question" id="mnemonic-ex" tabindex="0"></div>
+                      <div id="ex-mnemonic" tabindex="0">
+                        We offer you the option to view and store your <span class="color">mnemonic phrase</span>.
+                        This phrase is a series of random words that can be used to regain
+                        access to your wallet in case you lose your password or device.
+                        Even though we store your private key, it's important to keep
+                        your mnemonic phrase in a safe place and never share it with anyone.
+                        <br><br>
+                        <span class="color">Possessing your mnemonic phrase gives you additional control
+                        over your wallet</span>, as it can be used to restore your wallet on
+                        another platform if needed. Additionally, storing your mnemonic
+                        phrase is a way to enhance the security of your Ether wallet,
+                        as it can prevent a malicious third party from accessing
+                        your wallet even if they obtain your password or device.
+                        <br><br>
+                        The choice to store your mnemonic phrase or not is up to you.
+                        If you choose to store it, we recommend <span class="color">keeping it safe and
+                        never sharing it with anyone</span>. If you have any questions or
+                        concerns, please don't hesitate to contact us.
+                        <br><br>
+                        <div>
+                          Do you want to store a copy of your mnemonic on your own ?
+                        </div>
+                      </div>
+                      <div id="mnemonic-choice">
+                        <div class="button" v-on:click="store_wallet()">
+                            No
+                        </div>
+                        <div class="button" v-on:click="create_wallet.step = 3">
+                            Yes
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="create_wallet.step >= 3 && create_wallet.step < 5" >
+                      Your mnemonic <div class="question" tabindex="0" id="mnemonic-ex" v-if="create_wallet.step == 3"></div>
+                      <div v-if="create_wallet.step == 4" class="replace-question"></div>
+                      <div id="ex-mnemonic" tabindex="0">
+                        It's important to copy it down <span class="color">exactly as it's displayed</span>.
+                        After copying it, store it in a secure location.
+                        To ensure that you copied it correctly <span class="color">we will ask you to write it down</span>.
+                        This is an important step to ensure that you have copied the mnemonic correctly
+                        and that you can access your wallet in the future.
+                        <br><br>
+                        <span class="color">Be sure to store your written copy in a secure location</span>.
+                        <br>
+                      </div>
+                      <div class="text-subtitle" tabindex="0" >
+                        <span v-if="create_wallet.step == 3">From left to right up to down</span>
+                        <div v-else class="replace-subtitle">.</div>
+                      </div>
+                      <div id="mnemonic-raw" v-bind:class="[create_wallet.step > 3 ? 'blur' : '']">
+                        <div v-for="word in create_wallet.mnemonic">
+                          {{ word }}
+                        </div>
+                      </div>
+                      <div id="memonic-test" v-if="create_wallet.step == 4">
+                        {{ create_wallet.mnemonic_text }} <br><br>
+                        <div v-for="word in create_wallet.mnemonic_shuffle" v-on:click="mnemonic_add_word(word)" v-bind:class="[(create_wallet.mnemonic_try.includes(word)) ? 'disabled' : '']">
+                          {{ word }}
+                        </div>
+                      </div>
+                      <div id="mnemonic-choice">
+                        <div class="button" v-on:click="create_wallet.step -= 1; create_wallet.mnemonic_try = []">
+                            Back
+                        </div>
+                        <div class="button" v-if="create_wallet.step < 4" v-on:click="create_wallet.step += 1">
+                            Next
+                        </div>
+                      </div>
+                    </div>
+                    <div id="mnemonic-loader" v-if="create_wallet.step == 5">
+                      <span class="color">Securing</span> your data:
+                      <br><br>
+                      <div class="loader"></div>
+                    </div>
+
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -75,15 +214,15 @@
         <!-- Link to sign up page -->
         <footer>© NewTechStack</footer>
      </div>
-     <notifications ref="notification"></notifications>
+     <notifications ref="notifications"></notifications>
     </div>
 
     <script src="/assets/js/vue.min.js"></script>
     <script src="/assets/js/axios.min.js"></script>
-
-    <script src="/assets/notifications.js"></script>
+    <script type="text/javascript" src="/assets/js/ethers-5.7.2.umd.min.js"> </script>
+    <script src="/assets/js/notifications.js"></script>
     <script src="/user/script.js"></script>
 
-    <script src="/assets/encrypt.js"></script>
+    <script src="/assets/js/encrypt.js"></script>
 </body>
 </html>

@@ -17,6 +17,10 @@ class Builder:
                 data['data'][d] = Builder.run(data['data'][d])
             ret = DictObject(base_type, data['data'], type, property_name, property)
         elif isinstance(data['data'], list):
+            n = 0
+            while n < len(data["data"]):
+                data['data'][n] = Builder.run(data['data'][n])
+                n = n + 1
             ret = ListObject(base_type, data['data'], type, property_name, property)
         else:
             ret = StrObject(base_type, data['data'], type, property_name, property)

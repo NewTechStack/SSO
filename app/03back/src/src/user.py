@@ -20,10 +20,8 @@ class User(DB):
                 , property_name="verified", property=False),
                 "crypto": DictObject("protected",
                     data = {
-                        "encryption_password": StrObject("system"),
-                        "salt": StrObject("system"),
-                        "public_key": StrObject("private"),
-                        "address": StrObject("protected")
+                        "address": StrObject("protected"),
+                        "private_key": StrObject("private")
                     }
                 ),
                 "identity": DictObject("protected",
@@ -51,20 +49,20 @@ class User(DB):
                         "salt": StrObject("private"),
                         "rsa_owner":  DictObject("private",
                             data = {
-                            "rsa_public": StrObject("private"),
-                            "rsa_private_encrypted": StrObject("private")
+                            "public": StrObject("private"),
+                            "private_encrypted": StrObject("private")
                             }
                         ),
                         "rsa_contact":  DictObject("public",
                             data = {
-                            "rsa_public": StrObject("public"),
-                            "rsa_private_encrypted": StrObject("private")
+                            "public": StrObject("public"),
+                            "private_encrypted": StrObject("private")
                             }
                         ),
                         "ecdsa":  DictObject("public",
                             data = {
-                            "rsa_public": StrObject("public"),
-                            "rsa_private_encrypted": StrObject("private")
+                            "public": StrObject("public"),
+                            "private_encrypted": StrObject("private")
                             }
                         ),
                     }
@@ -97,9 +95,16 @@ class User(DB):
             )
         password = Commons.Crypto.hash(pseudo, password)
         if int(self.r.count().run(self.conn)) == 0:
-            self.model.change_data(['roles'], [StrObject('creator')])
+            self.model.change_data(['roles'], [StrObject('public', 'creator', property_name="by", property="system")])
         self.model.change_data(['pseudo'], pseudo)
         self.model.change_data(['password', 'by_pseudo'], password)
+        self.model.change_data(['encrypt', 'salt'], salt)
+        self.model.change_data(['encrypt', 'rsa_owner', 'public'], rsa_owner_pub)
+        self.model.change_data(['encrypt', 'rsa_owner', 'private_encrypted'], rsa_owner_private_encrypted)
+        self.model.change_data(['encrypt', 'rsa_contact', 'public'], rsa_contact_pub)
+        self.model.change_data(['encrypt', 'rsa_contact', 'private_encrypted'], rsa_contact_private_encrypted)
+        self.model.change_data(['encrypt', 'ecdsa', 'public'], ecdsa)
+        self.model.change_data(['encrypt', 'ecdsa', 'private_encrypted'], ecdsa_private_encrypted)
         self.data = self.model.formating()
         self.create()
         self.checkout()
@@ -135,6 +140,14 @@ class User(DB):
         self.checkout()
         Builder.run(self.data)
         self.data.change_data(['identity'], identity)
+        self.data = self.data.formating()
+        self.push()
+
+    def edit_crypto(self, address, private_key):
+        self.checkout()
+        self.data = Builder.run(self.data)
+        self.data.change_data(['crypto', 'address'], address)
+        self.data.change_data(['crypto', 'private_key'], private_key)
         self.data = self.data.formating()
         self.push()
 
@@ -185,7 +198,7 @@ def function():
     return data
 
 @Decorators.option
-@app.route(f'/user/salt', ['OPTIONS', 'GET'])
+@app.route(f'/user/encrypt', ['OPTIONS', 'GET'])
 @Decorators.response
 def function():
     token = request.headers.get("Authorization", None)
@@ -193,26 +206,7 @@ def function():
         raise Error.Forbidden('Missing Bearer token')
     user = User()
     Token(user).verify(token)
-    data = user.get().formating(access = "private")["salt"]
-    return data
-
-@Decorators.option
-@app.route(f'/user/salt', ['OPTIONS', 'PUT'])
-@Decorators.response
-def function():
-    token = request.headers.get("Authorization", None)
-    if token is None:
-        raise Error.Forbidden('Missing Bearer token')
-    user = User()
-    Token(user).verify(token)
-
-    data = Commons.Arguments.check(
-            source =    'body',
-            mandatory = [],
-            optionnal = ["salt"]
-        )
-
-    data = user.edit_salt(**data)
+    data = user.get().formating(access = "private")["data"]["encrypt"]["data"]
     return data
 
 @Decorators.option
@@ -228,6 +222,24 @@ def function():
     return data
 
 @Decorators.option
+@app.route(f'/user/crypto', ['OPTIONS', 'PUT'])
+@Decorators.response
+def function():
+    token = request.headers.get("Authorization", None)
+    if token is None:
+        raise Error.Forbidden('Missing Bearer token')
+    user = User()
+    Token(user).verify(token)
+    data = Commons.Arguments.check(
+            source =    'body',
+            mandatory = ["address", "private_key"],
+            optionnal = []
+        )
+
+    data = user.edit_crypto(**data)
+    return data
+
+@Decorators.option
 @app.route(f'/user/identity', ['OPTIONS', 'PUT'])
 @Decorators.response
 def function():
@@ -236,7 +248,6 @@ def function():
         raise Error.Forbidden('Missing Bearer token')
     user = User()
     Token(user).verify(token)
-
     data = Commons.Arguments.check(
             source =    'body',
             mandatory = [],

@@ -376,6 +376,47 @@ async function verify_using_ecdsa(public_key_b64, message, signature_b64) {
   return isValid;
 }
 
+async function generateEthAddress(public_key_b64) {
+  // Generate a 256-bit private key
+  const publicKey = await window.crypto.subtle.importKey(
+    "jwk",
+    JSON.parse(atob(public_key_b64)),
+    {
+      name: "ECDSA",
+      namedCurve: "P-256",
+    },
+    true,
+    ["verify"]
+  );
+
+  // Convert the public key to uncompressed format
+  const publicUncompressed = new Uint8Array([
+    0x04,
+    ...new TextEncoder().encode(publicKey.x),
+    ...new TextEncoder().encode(publicKey.y)
+  ]);
+
+  // Hash the public key using SHA-256
+  const hash = await window.crypto.subtle.digest(
+    'SHA-256',
+    publicUncompressed
+  );
+
+  // Take the last 20 bytes of the hash and convert to hex
+  const address = Array.from(new Uint8Array(hash.slice(-20)))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Add the "0x" prefix to the address
+  const addressWithPrefix = "0x" + address;
+
+  return addressWithPrefix;
+}
+
+async function privatekey(private_key_b64) {
+  return JSON.parse(atob(private_key_b64))
+}
+
 
 async function tests(){
   const message = "test";
@@ -394,4 +435,9 @@ async function tests(){
   const signature = await sign_using_ecdsa(ecdsa_keys.private_key, message);
   const isVerified = await verify_using_ecdsa(ecdsa_keys.public_key, message, signature);
   console.log("ECDSA", isVerified);
+  // const mnemonic = await generateMnemonic(ecdsa_keys.private_key);
+  const address = await generateEthAddress(ecdsa_keys.public_key);
+  const private_key = await privatekey(ecdsa_keys.private_key)
+  // const valid = await validateMnemonic(mnemonic)
+  console.log(private_key, address)
 }
