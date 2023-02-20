@@ -17,6 +17,7 @@ body {
   width: calc(100% - 30px);
   max-width: 960px;
   margin: 100px auto;
+  min-width: 399px;
 }
 
 /* Style du formulaire de connexion */
@@ -124,9 +125,27 @@ a {
   transition: max-height 0.5s;
 }
 
-.card:focus-within div.text-subtitle {
+.card:focus-within div.text-subtitle, .card  div.text-subtitle.display {
   max-height: 100px;
 }
+
+.propose .cancel {
+  margin-top: 20px;
+
+}
+.propose .cancel > button {
+  background-color: transparent;
+  color: #fff;
+  line-height: 1.3rem;
+  font-size: 1.175rem;
+  letter-spacing: 0;
+  font-weight: 400;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 2px;
+}
+
 
 .text-title {
   line-height: 2.05rem;
@@ -180,6 +199,37 @@ div.spacer {
   margin-left: 10px;
 }
 
+input {
+  width: 20rem;
+  padding: 8px;
+  margin: auto;
+  font-weight: 500;
+  line-height: 1.25rem;
+  font-size: .975rem;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #dadce0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+  background-color: transparent !important;
+  margin-bottom: 0px;
+}
+
+input:focus, input:hover {
+    border: 1px solid #1A6DF4;
+}
+
+.warning {
+  width: 20rem;
+  margin: auto;
+  text-align: left;
+  color: red;
+  font-weight: 400;
+  line-height: 1.3rem;
+  font-size: 1.05rem;
+  padding-left: 1rem;
+}
+
 .propose > div > div > .eth, .propose > div > div > span > .eth {
   background-image: url("/assets/img/ethereum.svg");
   background-repeat: no-repeat;
@@ -194,23 +244,29 @@ div.spacer {
   margin-bottom: 35px;
 }
 
-#new_adress > div{
+#new_address > div{
   display: inline-flex;
   margin-bottom: 10px;
   margin-top: 10px;
 }
 
 .address {
-  width: 26rem;
+  max-width: 34.3rem;
   word-break: break-all;
   margin-top: 8px;
   display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .address div.raw {
-  width: 24rem;
+  max-width: 32rem;
   margin-left: auto;
   margin-right: auto;
+}
+
+.action {
+  cursor: pointer;
 }
 
 .propose > div > div > span > .eth {
@@ -234,6 +290,14 @@ div.spacer {
   margin-left: 0.2rem;
 }
 
+#new_address > div > .reload {
+  margin-right: 20px;
+}
+
+#new_address > div > div > .dart {
+  margin-left: 20px;
+}
+
 .dart {
   mask-image: url("/assets/img/dart.svg");
   -webkit-mask-image: url("/assets/img/dart.svg");
@@ -255,6 +319,13 @@ div.spacer {
   top: 3.5px;
   cursor: pointer;
 }
+
+.question-compensator {
+  width: 1.5rem;
+  margin-right: 5px;
+  height: 1.5rem;
+}
+
 .replace-question {
   height: 1.5rem;
   width: 1.5rem;
@@ -275,27 +346,74 @@ div.spacer {
   -webkit-mask-repeat: no-repeat;
 }
 
+.add {
+  mask-image: url("/assets/img/add.svg");
+  -webkit-mask-image: url("/assets/img/add.svg");
+  background-color: rgb(26,115,232);
+  width: 2.8rem;
+  height: 2.8rem;
+  position: relative;
+  top: 11px;
+  margin-left: -5px;
+  cursor: pointer;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.down {
+  mask-image: url("/assets/img/down.svg");
+  -webkit-mask-image: url("/assets/img/down.svg");
+  background-color: rgb(26,115,232);
+  width: 1.8rem;
+  height: 1.8rem;
+  position: relative;
+  display: inline-block;
+  top: 0.4rem;
+  margin-left: -5px;
+  margin-right: 0.4rem;
+  cursor: pointer;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
 footer {
   display: none;
   bottom: 0px;
   left: calc(50% - 53.5px);
 }
 
-#ex-mnemonic, #ex-address {
+#wallet-action {
+  text-align: center;
+}
+
+#wallet-action .button {
+  width: 10rem;
+}
+
+#ex-mnemonic, #ex-address, #ex-wallet {
   max-height: 0px;
   overflow: hidden;
-  transition: 0.5s;
+
   font-weight: 400;
   line-height: 1.3rem;
   font-size: 1.05rem;
   width: 70%;
-  margin-left: 15%;
+  padding-left: 15%;
+  padding-right: 15%;
   text-align: justify;
   padding-bottom: 0px;
   padding-top: 0px;
 }
 
-#ex-mnemonic > div , #ex-address > div {
+#ex-address, #ex-wallet {
+  transition: 0.5s;
+}
+
+#mnemonic-ex.question, .replace-question {
+  margin-left: 5px;
+}
+
+#ex-mnemonic > div , #ex-address > div,  #ex-wallet > div {
   line-height: 1.3rem;
   font-size: 1.1rem;
   text-align: center;
@@ -303,7 +421,7 @@ footer {
 
 #mnemonic-ex:focus ~ #ex-mnemonic, #ex-mnemonic:focus,
 #address-ex:focus ~ #ex-address, #ex-address:focus-within,
-div.text-subtitle:focus ~ #ex-address {
+#wallet-ex:focus ~ #ex-wallet, #ex-wallet:focus-within {
   max-height: 1000px;
   padding-bottom: 5px;
   padding-top: 20px;
@@ -328,7 +446,7 @@ div.text-subtitle:focus ~ #ex-address {
 }
 
 #mnemonic-choice > .button {
-  width: 40px;
+  width: 50px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -353,7 +471,6 @@ div.text-subtitle:focus ~ #ex-address {
   display: inline-block;
   border: 1px solid;
   border-radius: 2px;
-
   width: 6rem;
 }
 
@@ -376,6 +493,37 @@ div.text-subtitle:focus ~ #ex-address {
   margin-bottom: 30px;
 }
 
+#ex-address li {
+  display: inline-block;
+  width: 30%;
+  max-width: 25rem;
+  min-width: 17rem;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+  padding-left: 15px;
+  border: 1px solid;
+  border-radius: 2px;
+  text-align:left;
+}
+
+#ex-address a {
+  text-decoration: none;
+  color: #dadce0;
+}
+
+#ex-address ul {
+  padding-left: 0px;
+  text-align: center;
+}
+
+#ex-address li > img {
+  width: 34px;
+  height: 34px;
+  position: relative;
+  top: 9px;
+  margin-right: 15px;
+}
+
 
 .button {
     background-color: #1A6DF4;
@@ -388,6 +536,14 @@ div.text-subtitle:focus ~ #ex-address {
     border: 1px solid transparent;
     border-radius: 2px;
     cursor: pointer;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.up-20 {
+  margin-top: -20px;
 }
 
 @media (max-width: 900px) {
@@ -419,11 +575,29 @@ div.text-subtitle:focus ~ #ex-address {
   .content {
     margin-bottom: 20px;
   }
+
+   #ex-address, #ex-wallet {
+    width: 100%;
+    padding-left: 0%;
+    padding-right: 0%;
+  }
+
+  #new_address > div > .reload {
+    margin-right: 0px;
+  }
+
+  #new_address > div > div > .dart {
+    margin-left: 0px;
+  }
 }
 
 @media (max-width: 600px) {
   #app {
     margin-top: 30px;
+  }
+
+  div.wrapper {
+    padding: 0px;
   }
 
   .card-title {
@@ -443,7 +617,6 @@ div.text-subtitle:focus ~ #ex-address {
     left: -40px;
     margin-top: 20px !important;
   }
-
 
   .card {
     margin-top: 20px;
@@ -483,6 +656,16 @@ div.text-subtitle:focus ~ #ex-address {
   .dart {
     margin-top: 8px;
   }
+
+  .content .extend {
+    min-width: 370px;
+  }
+}
+
+@media (max-width: 446px) {
+  .extend #ex-address, .extend #ex-wallet {
+    margin-left: -10px !important;
+  }
 }
 
 
@@ -490,6 +673,7 @@ div.text-subtitle:focus ~ #ex-address {
   #app {
     margin-top: 10px;
   }
+
 
   div.spacer {
     height: 3px;
@@ -534,11 +718,18 @@ div.text-subtitle:focus ~ #ex-address {
 
 }
 
+
 @media (prefers-color-scheme: dark) {
   body {
     background: #000e29;
     color: #dadce0;
   }
+
+  input {
+    color: #dadce0;
+    border-color: rgb(218, 220, 224);
+  }
+
   .color {
     color: #dadce0;
   }
@@ -567,11 +758,9 @@ div.text-subtitle:focus ~ #ex-address {
     border-color: rgb(218, 220, 224);
   }
 
-  .reload , .dart, .copy {
+  .reload , .dart, .copy, .add, .down {
     background-color: #dadce0;
   }
-
-
 }
 
 div.loader::before {

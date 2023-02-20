@@ -3,6 +3,16 @@ var app = new Vue({
   data: {
     user_data: void 0,
     encrypt: void 0,
+    new_wallet: {
+      active: false,
+      create: false,
+      import: false,
+      import_step: 0,
+      warning: {
+        value: false,
+        text: "name should be 8 in l;ength",
+      }
+    },
     create_wallet: {
       address: "0x0000000000000000000000000000000000000000",
       mnemonic: [],
@@ -11,10 +21,14 @@ var app = new Vue({
       mnemonic_text: "Click the words in the correct order",
       mnemonic_shuffle: [],
       try: 0,
-      mnemonic_try: []
+      mnemonic_try: [],
+      warning: {
+        value: false,
+        text: "name should be 8 in l;ength",
+      },
+      name: ""
     },
     load: true,
-    test: "not ok",
     appDisplay: "block",
   },
   mounted: function() {
@@ -47,12 +61,31 @@ var app = new Vue({
     }
   },
   methods: {
-    generate_wallet(){
+    generate_wallet(private_key = void 0){
       this.create_wallet.step = 0
-      this.create_wallet.address = "0x0000000000000000000000000000000000000000"
-      const wallet = ethers.Wallet.createRandom()
-      this.create_wallet.mnemonic = wallet.mnemonic.phrase.split(" ")
-      this.create_wallet.mnemonic_shuffle = wallet.mnemonic.phrase.split(" ");
+      this.create_wallet.name = ""
+      this.create_wallet.address = "0x0000000000000000000000000000000000000000";
+      let hasDuplicate = true;
+      if (private_key != void 0) {
+        try {
+          var wallet = new ethers.Wallet(private_key);
+          hasDuplicate = false;
+        } catch (error) {
+          this.new_wallet.warning.value = true;
+          this.new_wallet.warning.text = "Invalid private key";
+          return false;
+        }
+      }
+      while (hasDuplicate){
+        var wallet = ethers.Wallet.createRandom();
+
+        this.create_wallet.mnemonic = wallet.mnemonic.phrase.split(" ")
+        hasDuplicate = this.create_wallet.mnemonic.some((item, index) => this.create_wallet.mnemonic.indexOf(item, index + 1) !== -1);
+      }
+      if (private_key == void 0) {
+        this.create_wallet.mnemonic_shuffle = wallet.mnemonic.phrase.split(" ");
+      }
+      console.log(wallet.privateKey);
       let similarities = true;
       while (similarities == true){
         this.create_wallet.mnemonic_shuffle.sort((a, b) => 0.5 - Math.random());
@@ -61,6 +94,38 @@ var app = new Vue({
       this.create_wallet.private_key = wallet.privateKey;
       this.create_wallet.address = wallet.address;
       this.create_wallet.step = 1;
+      return true;
+    },
+    generate_wallet_from_private(){
+      if (this.create_wallet.private_key.length == 0){
+        return;
+      }
+      let success = this.generate_wallet(this.create_wallet.private_key);
+      console.log(this.new_wallet);
+      if (success == false){
+        return;
+      }
+      this.create_wallet.step = 5;
+      this.new_wallet.create = true;
+      this.new_wallet.active = true;
+      this.new_wallet.import = false;
+    },
+    add_wallet(){
+      this.new_wallet.active = true;
+    },
+    add_wallet_new(){
+      this.new_wallet.create = true;
+      this.generate_wallet();
+      console.log(this.create_wallet.private_key)
+    },
+    add_wallet_reset() {
+      this.new_wallet.active = false;
+      this.new_wallet.create = false;
+      this.create_wallet.step = 0
+    },
+    add_walllet_import(){
+      this.new_wallet.import = true;
+      this.create_wallet.private_key = '';
     },
     mnemonic_add_word(word) {
       if (this.create_wallet.mnemonic_try.includes(word)){
@@ -82,11 +147,11 @@ var app = new Vue({
       }
       this.create_wallet.mnemonic_text = "Click the words in the correct order"
       if (length == this.create_wallet.mnemonic.length){
-        this.store_wallet()
+        this.create_wallet.step = 5;
       }
     },
     async store_wallet(){
-      this.create_wallet.step = 5;
+      this.create_wallet.step = 6;
       const self = this;
       let address = await encrypt_using_rsa(this.create_wallet.address, this.encrypt.rsa_owner.public)
       let private_key = await encrypt_using_rsa(this.create_wallet.private_key, this.encrypt.rsa_owner.public)
@@ -100,7 +165,10 @@ var app = new Vue({
             headers: { Authorization: `Bearer ${token}` }
           }
         ).then(function(res) {
-            self.load_user()
+            // self.load_user()
+            // self.new_wallet.create = false;
+            // self.new_wallet.active = false;
+            // self.create_wallet.step = 0;
           }
         );
       } catch (error) {
@@ -155,6 +223,7 @@ var app = new Vue({
       temp_textarea.select();
       document.execCommand("copy");
       document.body.removeChild(temp_textarea);
+      document.querySelector("#wallet").focus()
     },
     message(name_1, status_1, name_2 = void 0, status_2 = void 0){
       if (name_2 == undefined) {

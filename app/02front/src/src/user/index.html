@@ -67,51 +67,108 @@
                 </div>
               </div>
             </div>
-            <div class="width-full card-100 card" tabindex="0">
-              <div class="card-title" v-if="user_data.data.crypto.data.address.data != 'None'">
+            <div id="wallet" class="width-full card card-130" tabindex="0">
+              <div class="card-title" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == false">
                 <h3 class="text-normal">Wallet</h3>
               </div>
-              <div class="content" v-if="user_data.data.crypto.data.address.data != 'None'">
+              <div class="content" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == false">
                 <div class="non">{{ 'user_data.data.crypto.data.address.data' | clear }}</div>
                 <div class="text-normal">
-                  Address:
-                  <a v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check" target="_blank" class="color">
-                    {{ user_data.data.crypto.data.address.data | clear_check | address_filter}}
-                  </a>
-                  <button class="copy"  v-on:click="copy_to_clipboard(user_data.data.crypto.data.address.data)"></button>
-                  <div class="question" id="address-ex" tabindex="0"></div>
-                  <div class="text-subtitle" tabindex="0">
-                  {{ message("address", user_data.data.crypto.data.address.metadata.type.actual) }}
-                  </div>
-                  <div id="ex-address" tabindex="0">
-                    By using our site, you can seamlessly interact with various
-                    blockchain networks, view your balances, and track your transactions.
-                    Please note that our site does not require you to create
-                    separate accounts for each chain.
-                    You can use the same wallet address across all compatible chains.
-                    Our website is compatible with several blockchain networks.
-                    You can use our services with the following chains:
-                    <ul>
-                      <li><a target="_blank" v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check">Ethereum</a></li>
-                      <li><a target="_blank" v-bind:href="'https://bscscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Binance Smart Chain (BSC)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://polygonscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Polygon (MATIC)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://hecoinfo.com/address/' + user_data.data.crypto.data.address.data | clear_check">Huobi Eco Chain (HECO)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://ftmscan.com/address/' + user_data.data.crypto.data.address.data | clear_check">Fantom Opera (FTM)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://cchain.explorer.avax.network/address/' + user_data.data.crypto.data.address.data | clear_check">Avalanche (AVAX)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://www.oklink.com/okexchain/address/' + user_data.data.crypto.data.address.data | clear_check">OKExChain (OKT)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://blockscout.com/xdai/mainnet/address/' + user_data.data.crypto.data.address.data | clear_check">xDai Chain (XDAI)</a></li>
-                      <li><a target="_blank" v-bind:href="'https://explorer.harmony.one/address/' + user_data.data.crypto.data.address.data | clear_check">Harmony One (ONE)</a></li>
-                    </ul>
+                  <div>Name: <div class="color inline"> wallet 1 </div></div>
+                  <div class="up-20 extend">
+                    Address:
+                    <a v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check" target="_blank" class="color">
+                      {{ user_data.data.crypto.data.address.data | clear_check | address_filter}}
+                    </a>
+                    <button class="copy"  v-on:click="copy_to_clipboard(user_data.data.crypto.data.address.data)"></button>
+                    <button class="add" v-on:click="add_wallet()"></button>
+                    <div class="down" id="wallet-ex" tabindex="0"></div>
+                    <div class="question" id="address-ex" tabindex="0"></div>
+                    <div class="text-subtitle" tabindex="0">
+                    {{ message("address", user_data.data.crypto.data.address.metadata.type.actual) }}
+                    </div>
+                    <div id="ex-wallet" tabindex="0">
+                      Our platform simplifies how you interact with different blockchain networks.
+                      You can access and manage your transactions and balances in one place.
+                      The best part is you don't have to create separate accounts for each chain.
+                      You can use the same wallet address across all compatible chains.
+                      This makes it easier for you to keep track of everything without
+                      needing to remember multiple login credentials or navigate
+                      different interfaces.
+
+                    </div>
+                    <div id="ex-address" tabindex="0">
+                      Our platform simplifies how you interact with different blockchain networks.
+                      You can access and manage your transactions and balances in one place.
+                      The best part is you don't have to create separate accounts for each chain.
+                      You can use the same wallet address across all compatible chains.
+                      This makes it easier for you to keep track of everything without
+                      needing to remember multiple login credentials or navigate
+                      different interfaces.
+                      <ul>
+                        <a target="_blank" v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/ethereum.svg" alt="Logo Ethereum"/>Ethereum (ETH)</li></a>
+                        <a target="_blank" v-bind:href="'https://bscscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/bnb.svg" alt="Logo Ethereum"/>Binance Smart Chain (BSC)</li></a>
+                        <a target="_blank" v-bind:href="'https://polygonscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/polygon.svg" alt="Logo Ethereum"/>Polygon (MATIC)</li></a>
+                        <a target="_blank" v-bind:href="'https://ftmscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/fantom.svg" alt="Logo Ethereum"/>Fantom Opera (FTM)</li></a>
+                        <a target="_blank" v-bind:href="'https://cchain.explorer.avax.network/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/avalanche.svg" alt="Logo Ethereum"/>Avalanche (AVAX)</li></a>
+                        <a target="_blank" v-bind:href="'https://explorer.harmony.one/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/harmony.svg" alt="Logo Ethereum"/>Harmony One (ONE)</li></a>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div v-else class="propose">
+              <div class="propose" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == true && new_wallet.create == false  && new_wallet.import == false" >
+                <div class="propose-title" v-if="create_wallet.step <= 1">
+                  <div class="text-title color"><div class="eth"></div >Add a new wallet</div>
+                  <div class="spacer"></div>
+                  <div class="text-normal">Create a new wallet or import one using your private key</div>
+                  <div class="text-subtitle display">
+                    Don't worry you'll be keeping your old wallet(s)
+                  </div>
+                </div>
+                <div id="wallet-action">
+                  <button class="button" v-on:click="add_wallet_new()">New Wallet</button>
+                  <button class="button" v-on:click="add_walllet_import()">Import a Wallet</button>
+                </div>
+                <div class="cancel" v-on:click="add_wallet_reset()"><button>Cancel</button></div>
+              </div >
+
+              <div v-if="new_wallet.import == true" class="propose">
+                <div class="propose-title">
+                  <div class="text-title color"><div class="eth"></div >Import your wallet</div>
+                  <div class="spacer"></div>
+                  <div class="text-normal">Simply and securely import your ethereum wallet</div>
+                </div>
+                <div class="question-compensator inline"></div>
+                <div class="inline">Enter your private key</div>
+                <div class="question" id="mnemonic-ex" tabindex="0"></div>
+                <br><br>
+                <div v-if="new_wallet.import_step == 0">
+                    <input type="text" name="wallet name" v-model="create_wallet.private_key" placeholder="Your private key" autocapitalize="off" autocorrect="off" spellcheck="false" aria-invalid="false">
+                    <div class="warning noselect" v-if="new_wallet.warning.value == true"><div class="warning-img"></div><div class="text">{{ new_wallet.warning.text }}</div></div>
+                </div>
+                <div id="mnemonic-choice">
+                  <div class="button" v-on:click=generate_wallet_from_private()>
+                      Next
+                  </div>
+                </div>
+                <div id="ex-mnemonic" tabindex="0">
+                  A wallet private key is a sequence of 64 characters consisting
+                  of numbers and letters from A to F, usually starting with "0x"
+                  <br><br>
+                  Here is an example of a wallet private key:
+                  <br>
+                  - 0x2f7d3840a68fb29a0e76e6d5c5a5f5c8901c8d08f28c7b63f1f2924dcb26b4c4.
+                </div>
+              </div>
+
+              <div v-if="((user_data.data.crypto.data.address.data == 'None') || (new_wallet.create == true)) && new_wallet.import == false" class="propose">
                   <div class="propose-title" v-if="create_wallet.step <= 1">
                     <div class="text-title color"><div class="eth"></div >Create your wallet</div>
                     <div class="spacer"></div>
                     <div class="text-normal">Simply and securely create your ethereum wallet</div>
                   </div>
-                  <div id="new_adress">
+                  <div id="new_address">
                     <div>
                       <div class="reload" v-if="create_wallet.step == 1" v-on:click="generate_wallet()">
                       </div>
@@ -123,9 +180,16 @@
                       </div>
                     </div>
                   </div>
+                  <div class="text-subtitle display" v-if="this.new_wallet.active == false && create_wallet.step <= 1">
+                    <div class="spacer"></div>
+                    Already got a wallet ?
+                    <span class="color action" v-on:click="add_walllet_import()"> click here to import by private key</span>
+                  </div>
                   <div id="mnemonic">
                     <div v-if="create_wallet.step == 2" >
-                      Display your mnemonic <div class="question" id="mnemonic-ex" tabindex="0"></div>
+                      <div class="question-compensator inline"></div>
+                      <div class="inline">Display your mnemonic </div>
+                      <div class="question" id="mnemonic-ex" tabindex="0"></div>
                       <div id="ex-mnemonic" tabindex="0">
                         We offer you the option to view and store your <span class="color">mnemonic phrase</span>.
                         This phrase is a series of random words that can be used to regain
@@ -150,7 +214,7 @@
                         </div>
                       </div>
                       <div id="mnemonic-choice">
-                        <div class="button" v-on:click="store_wallet()">
+                        <div class="button" v-on:click="create_wallet.step = 5">
                             No
                         </div>
                         <div class="button" v-on:click="create_wallet.step = 3">
@@ -158,10 +222,12 @@
                         </div>
                       </div>
                     </div>
-                    <div v-if="create_wallet.step >= 3 && create_wallet.step < 5" >
-                      Your mnemonic <div class="question" tabindex="0" id="mnemonic-ex" v-if="create_wallet.step == 3"></div>
+                    <div v-if="create_wallet.step >= 3 && create_wallet.step < 6" >
+                      <div class="question-compensator inline"v-if="create_wallet.step <= 4"></div>
+                      <div v-if="create_wallet.step < 5" class="inline">Your mnemonic</div>
+                      <div class="question" tabindex="0" id="mnemonic-ex" v-if="create_wallet.step == 3"></div>
                       <div v-if="create_wallet.step == 4" class="replace-question"></div>
-                      <div id="ex-mnemonic" tabindex="0">
+                      <div id="ex-mnemonic" tabindex="0" v-if="create_wallet.step < 5">
                         It's important to copy it down <span class="color">exactly as it's displayed</span>.
                         After copying it, store it in a secure location.
                         To ensure that you copied it correctly <span class="color">we will ask you to write it down</span>.
@@ -175,32 +241,39 @@
                         <span v-if="create_wallet.step == 3">From left to right up to down</span>
                         <div v-else class="replace-subtitle">.</div>
                       </div>
-                      <div id="mnemonic-raw" v-bind:class="[create_wallet.step > 3 ? 'blur' : '']">
+                      <div id="mnemonic-raw" v-bind:class="[create_wallet.step > 3 ? 'blur' : '']" v-if="create_wallet.step < 5">
                         <div v-for="word in create_wallet.mnemonic">
                           {{ word }}
                         </div>
                       </div>
                       <div id="memonic-test" v-if="create_wallet.step == 4">
-                        {{ create_wallet.mnemonic_text }} <br><br>
+                        {{ create_wallet.mnemonic_text }}
+                        <br><br>
                         <div v-for="word in create_wallet.mnemonic_shuffle" v-on:click="mnemonic_add_word(word)" v-bind:class="[(create_wallet.mnemonic_try.includes(word)) ? 'disabled' : '']">
                           {{ word }}
                         </div>
                       </div>
+                      <div v-if="create_wallet.step == 5">
+                          <input type="text" name="wallet name" v-model="create_wallet.name" placeholder="Wallet name" autocapitalize="off" autocorrect="off" spellcheck="false" aria-invalid="false">
+                          <div class="warning noselect" v-if="create_wallet.warning.value == true"><div class="warning-img"></div><div class="text">{{ create_wallet.warning.text }}</div></div>
+                      </div>
                       <div id="mnemonic-choice">
-                        <div class="button" v-on:click="create_wallet.step -= 1; create_wallet.mnemonic_try = []">
+                        <div class="button" v-if="create_wallet.step < 5" v-on:click="create_wallet.step -= 1; create_wallet.mnemonic_try = []">
                             Back
                         </div>
                         <div class="button" v-if="create_wallet.step < 4" v-on:click="create_wallet.step += 1">
                             Next
                         </div>
+                        <div class="button" v-if="create_wallet.step > 4" v-on:click="store_wallet()">
+                            Finish
+                        </div>
                       </div>
                     </div>
-                    <div id="mnemonic-loader" v-if="create_wallet.step == 5">
+                    <div id="mnemonic-loader" v-if="create_wallet.step == 6">
                       <span class="color">Securing</span> your data:
                       <br><br>
                       <div class="loader"></div>
                     </div>
-
                   </div>
                 </div>
               </div>
