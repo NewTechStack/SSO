@@ -22,7 +22,7 @@ services:
       - exterior
       - proxy
     ports:
-      - 8081:80
+      - 8888:80
     healthcheck:
       test: exit $$( curl -so /dev/null --fail http://127.0.0.1:8080 && echo 0 || echo 1 )
       interval: 30s
@@ -81,7 +81,7 @@ services:
     container_name: sso-rethink
     restart: always
     ports:
-      - 8080:8080
+      - 8887:8080
     expose:
       - 28015
     # volumes:
