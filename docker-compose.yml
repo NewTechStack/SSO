@@ -3,7 +3,8 @@ networks:
   ext:
   exterior:
   proxy:
-    internal: true
+    external:
+      name: biller_proxy
   dbnet:
     internal: true
 
