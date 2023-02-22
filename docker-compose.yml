@@ -32,6 +32,8 @@ services:
     environment:
       VIRTUAL_HOST: ged2.smartdom.ch
       VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ged2.smartdom.ch
+      LETSENCRYPT_EMAIL: eliot.courtel@wanadoo.fr
 
   front:
     build:
