@@ -30,7 +30,7 @@ services:
       timeout: 1s
       retries: 1
     environment:
-      VIRTUAL_HOST: ged.smartdom.ch
+      VIRTUAL_HOST: ged2.smartdom.ch
       VIRTUAL_PORT: 80
 
   front:
