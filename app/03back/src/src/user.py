@@ -18,12 +18,7 @@ class User(DB):
                         "phone": StrObject("protected", property_name="verified", property=False)
                     }
                 , property_name="verified", property=False),
-                "crypto": DictObject("protected",
-                    data = {
-                        "address": StrObject("protected"),
-                        "private_key": StrObject("private")
-                    }
-                ),
+                "crypto": ListObject("protected", data=[]),
                 "identity": DictObject("protected",
                     data = {
                         "last_name": StrObject("protected", property_name="verified", property=False),
@@ -143,13 +138,32 @@ class User(DB):
         self.data = self.data.formating()
         self.push()
 
-    def edit_crypto(self, address, private_key):
+    def add_crypto(self, address, private_key, name):
         self.checkout()
         self.data = Builder.run(self.data)
-        self.data.change_data(['crypto', 'address'], address)
-        self.data.change_data(['crypto', 'private_key'], private_key)
+        data = DictObject("protected",
+            data = {
+                "name": StrObject("protected", data=name),
+                "address": StrObject("protected", data=address),
+                "private_key": StrObject("protected", data=private_key),
+            }
+        )
+        self.data.add_data(["crypto"], data)
         self.data = self.data.formating()
         self.push()
+
+    def del_crypto(self, address, private_key):
+        self.checkout()
+        self.data = Builder.run(self.data)
+        data = DictObject("protected",
+            data = {
+                "address": StrObject("protected", data=address),
+                "private_key": StrObject("protected", data=private_key),
+            }
+        )
+        self.data.del_data(data)
+        # self.data = self.data.formating()
+        # self.push()
 
     def edit_salt(self, salt):
         update = self.model["salt"]
@@ -232,11 +246,27 @@ def function():
     Token(user).verify(token)
     data = Commons.Arguments.check(
             source =    'body',
-            mandatory = ["address", "private_key"],
+            mandatory = ["address", "private_key", "name"],
             optionnal = []
         )
+    data = user.add_crypto(**data)
+    return data
 
-    data = user.edit_crypto(**data)
+@Decorators.option
+@app.route(f'/user/crypto', ['OPTIONS', 'DELETE'])
+@Decorators.response
+def function():
+    token = request.headers.get("Authorization", None)
+    if token is None:
+        raise Error.Forbidden('Missing Bearer token')
+    user = User()
+    Token(user).verify(token)
+    data = Commons.Arguments.check(
+            source =    'body',
+            mandatory = ["address", "private_key", "name"],
+            optionnal = []
+        )
+    data = user.del_crypto(**data)
     return data
 
 @Decorators.option

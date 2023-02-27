@@ -68,24 +68,24 @@
               </div>
             </div>
             <div id="wallet" class="width-full card card-130" tabindex="0">
-              <div class="card-title" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == false">
+              <div class="card-title" v-if="user_data.data.crypto.data.length != 0 && new_wallet.active == false">
                 <h3 class="text-normal">Wallet</h3>
               </div>
-              <div class="content" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == false">
-                <div class="non">{{ 'user_data.data.crypto.data.address.data' | clear }}</div>
+              <div class="content" v-if="user_data.data.crypto.data.length != 0 && new_wallet.active == false">
+                <div class="non">{{ 'user_data.data.crypto.data.' + wallet_display.index + '.data.address.data' | clear }}</div>
                 <div class="text-normal">
                   <div>Name: <div class="color inline"> wallet 1 </div></div>
                   <div class="up-20 extend">
                     Address:
-                    <a v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check" target="_blank" class="color">
-                      {{ user_data.data.crypto.data.address.data | clear_check | address_filter}}
+                    <a v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check" target="_blank" class="color">
+                      {{ user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check | address_filter}}
                     </a>
-                    <button class="copy"  v-on:click="copy_to_clipboard(user_data.data.crypto.data.address.data)"></button>
+                    <button class="copy"  v-on:click="copy_to_clipboard(user_data.data.crypto.data[wallet_display.index].data.address.data)"></button>
                     <button class="add" v-on:click="add_wallet()"></button>
                     <div class="down" id="wallet-ex" tabindex="0"></div>
                     <div class="question" id="address-ex" tabindex="0"></div>
                     <div class="text-subtitle" tabindex="0">
-                    {{ message("address", user_data.data.crypto.data.address.metadata.type.actual) }}
+                    {{ message("address", user_data.data.crypto.data[wallet_display.index].data.address.metadata.type.actual) }}
                     </div>
                     <div id="ex-wallet" tabindex="0">
                       Our platform simplifies how you interact with different blockchain networks.
@@ -106,18 +106,18 @@
                       needing to remember multiple login credentials or navigate
                       different interfaces.
                       <ul>
-                        <a target="_blank" v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/ethereum.svg" alt="Logo Ethereum"/>Ethereum (ETH)</li></a>
-                        <a target="_blank" v-bind:href="'https://bscscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/bnb.svg" alt="Logo Ethereum"/>Binance Smart Chain (BSC)</li></a>
-                        <a target="_blank" v-bind:href="'https://polygonscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/polygon.svg" alt="Logo Ethereum"/>Polygon (MATIC)</li></a>
-                        <a target="_blank" v-bind:href="'https://ftmscan.com/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/fantom.svg" alt="Logo Ethereum"/>Fantom Opera (FTM)</li></a>
-                        <a target="_blank" v-bind:href="'https://cchain.explorer.avax.network/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/avalanche.svg" alt="Logo Ethereum"/>Avalanche (AVAX)</li></a>
-                        <a target="_blank" v-bind:href="'https://explorer.harmony.one/address/' + user_data.data.crypto.data.address.data | clear_check"><li><img src="/assets/img/harmony.svg" alt="Logo Ethereum"/>Harmony One (ONE)</li></a>
+                        <a target="_blank" v-bind:href="'https://etherscan.io/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/ethereum.svg" alt="Logo Ethereum"/>Ethereum (ETH)</li></a>
+                        <a target="_blank" v-bind:href="'https://bscscan.com/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/bnb.svg" alt="Logo Ethereum"/>Binance Smart Chain (BSC)</li></a>
+                        <a target="_blank" v-bind:href="'https://polygonscan.com/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/polygon.svg" alt="Logo Ethereum"/>Polygon (MATIC)</li></a>
+                        <a target="_blank" v-bind:href="'https://ftmscan.com/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/fantom.svg" alt="Logo Ethereum"/>Fantom Opera (FTM)</li></a>
+                        <a target="_blank" v-bind:href="'https://cchain.explorer.avax.network/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/avalanche.svg" alt="Logo Ethereum"/>Avalanche (AVAX)</li></a>
+                        <a target="_blank" v-bind:href="'https://explorer.harmony.one/address/' + user_data.data.crypto.data[wallet_display.index].data.address.data | clear_check"><li><img src="/assets/img/harmony.svg" alt="Logo Ethereum"/>Harmony One (ONE)</li></a>
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="propose" v-if="user_data.data.crypto.data.address.data != 'None' && new_wallet.active == true && new_wallet.create == false  && new_wallet.import == false" >
+              <div class="propose" v-if="user_data.data.crypto.data.length != 0 && new_wallet.active == true && new_wallet.create == false  && new_wallet.import == false" >
                 <div class="propose-title" v-if="create_wallet.step <= 1">
                   <div class="text-title color"><div class="eth"></div >Add a new wallet</div>
                   <div class="spacer"></div>
@@ -162,7 +162,7 @@
                 </div>
               </div>
 
-              <div v-if="((user_data.data.crypto.data.address.data == 'None') || (new_wallet.create == true)) && new_wallet.import == false" class="propose">
+              <div v-if="((user_data.data.crypto.data.length == 0) || (new_wallet.create == true)) && new_wallet.import == false" class="propose">
                   <div class="propose-title" v-if="create_wallet.step <= 1">
                     <div class="text-title color"><div class="eth"></div >Create your wallet</div>
                     <div class="spacer"></div>

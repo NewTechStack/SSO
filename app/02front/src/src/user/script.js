@@ -28,6 +28,9 @@ var app = new Vue({
       },
       name: ""
     },
+    wallet_display: {
+      index: 0
+    },
     load: true,
     appDisplay: "block",
   },
@@ -155,11 +158,13 @@ var app = new Vue({
       const self = this;
       let address = await encrypt_using_rsa(this.create_wallet.address, this.encrypt.rsa_owner.public)
       let private_key = await encrypt_using_rsa(this.create_wallet.private_key, this.encrypt.rsa_owner.public)
+      let name = await encrypt_using_rsa(this.create_wallet.name, this.encrypt.rsa_owner.public)
       token = this.get_token()
       try {
         const response = await axios.put('/api/user/crypto', {
             address: address,
-            private_key: private_key
+            private_key: private_key,
+            name: name
           },
           {
             headers: { Authorization: `Bearer ${token}` }
@@ -203,13 +208,14 @@ var app = new Vue({
       }).then(function(res) {
         self.user_data = res.data.data;
         self.load = false;
-        if (res.data.data.data.crypto.data.address.data == "None") {
+        console.log(res.data.data.data.crypto.data.length)
+        if (res.data.data.data.crypto.data.length == 0) {
           setTimeout( function ()  {
             this.app.generate_wallet();
           }.bind(this), 0);
         }
       }).catch((error) => {
-        self.disconnect();
+        //self.disconnect();
       });
     },
     disconnect(){

@@ -6,6 +6,20 @@ class DictObject(Base):
         self.data = data
         super().__init__(base_type, type, property_name, property, last_update)
 
+    def add_data(self, keys, new_data):
+        key = keys[0]
+        if key not in self.data:
+            raise Error.InternalLogic('Dictchange_data')
+        if isinstance(self.data[key], ListObject):
+            if len(keys) > 1:
+                raise Error.InternalLogic("Dictchange_data")
+            self.data[key].add_data(new_data)
+        else:
+            if len(keys) == 0:
+                raise Error.InternalLogic("Dictadd_data")
+            self.data[key].change_data(keys[1:], new_data)
+        self.updated()
+
     def change_data(self, keys, new_data):
         key = keys[0]
         if key not in self.data:
@@ -51,6 +65,19 @@ class ListObject(Base):
         self.data = new_data
         self.updated()
         return
+
+    def add_data(self, new_data):
+        self.data.append(new_data)
+        self.updated()
+        return
+
+    def del_data(self, old_data):
+        i = 0
+        while i < len(self.data):
+            print(self.data[i], old_data)
+            if self.data[i] == old_data:
+                break
+            i = i + 1
 
     def get_data(self, query = False,  access = "public"):
         return [d.formating(query = query, access = access) for d in self.data]
